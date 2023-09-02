@@ -203,7 +203,7 @@ Public Class FrmHome
         Dim ProcessStartInfo As New ProcessStartInfo()
         Me.ProgressBar.Value = 0
         If grd.Items.Count > 0 Then
-            lblStatus.Text = "Building  ..."
+            lblStatus.Text = "Building ..."
             Refresh()
             For Each selectedItem As Object In grd.SelectedItems
                 Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
