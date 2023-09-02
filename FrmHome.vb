@@ -8,6 +8,8 @@ Public Class FrmHome
     Dim fileList As New List(Of String)
     Dim ConfigPath As String = Application.StartupPath & "\Config\appsettings.json"
     Dim targetExtension As String
+    Dim LastVersion As String
+    Dim LastRevision As Int32
     Private Sub FrmHome_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblStatus.Text = "Ready"
         ProgressBar.Maximum = 100
@@ -100,31 +102,23 @@ Public Class FrmHome
             lblStatus.Text = "Error occured while retrieving files" & vbCrLf & ex.Message
         End Try
     End Sub
-    Private Sub ChangeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BuildToolStripMenuItem.Click
-        Me.ProgressBar.Value = 0
-        If grd.Items.Count > 0 Then
-            lblStatus.Text = "Building ..."
-            Refresh()
-            For Each selectedItem As Object In grd.SelectedItems
-                Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
-                Dim projectPath As String = selectedItem
-                Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{projectPath}"" /t:Rebuild /p:Configuration=Debug")
-                lblStatus.Text = "Build successfull"
-            Next
-        Else
-            lblStatus.Text = "Choose projects to build"
-        End If
-        Me.ProgressBar.Value = 100
-    End Sub
+    Private Function GetPath(ByVal _WithFilePath As Boolean, ByVal _Path As String) As String
+        Dim selectedPath As String = _Path
+        Dim folderBrowser As New FolderBrowserDialog
+        Dim openFileDialog As New OpenFileDialog
 
-    Private Sub ReleaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReleaseToolStripMenuItem.Click
-        Me.ProgressBar.Value = 0
-        lblStatus.Text = "Publishing ..."
-        Refresh()
-        Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{config.Version.PublisherPath}"" /t:clean /t:publish /p:Configuration=Release /p:PublishDir=""{config.Version.PublishPath}""")
-        lblStatus.Text = "Publish successfull"
-        Me.ProgressBar.Value = 100
-    End Sub
+        folderBrowser.SelectedPath = selectedPath
+        If _WithFilePath Then
+            If openFileDialog.ShowDialog() = DialogResult.OK Then
+                selectedPath = openFileDialog.FileName
+            End If
+        Else
+            If folderBrowser.ShowDialog() = DialogResult.OK Then
+                selectedPath = folderBrowser.SelectedPath
+            End If
+        End If
+        Return selectedPath
+    End Function
     Private Sub ExecuteCmdCommand(processStartInfo As ProcessStartInfo, ByVal _FileName As String, ByVal _Arguments As String)
         processStartInfo.FileName = _FileName
         processStartInfo.Arguments = _Arguments
@@ -141,6 +135,32 @@ Public Class FrmHome
             process.WaitForExit()
         End Using
     End Sub
+    Private Sub ChangeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BuildToolStripMenuItem.Click
+        Me.ProgressBar.Value = 0
+        If grd.Items.Count > 0 Then
+            lblStatus.Text = "Building ..."
+            Refresh()
+            For Each selectedItem As Object In grd.SelectedItems
+                Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
+                Dim projectPath As String = selectedItem
+                Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{projectPath}"" /t:Rebuild /p:Configuration=Debug")
+                lblStatus.Text = "Build successfull"
+            Next
+        Else
+            lblStatus.Text = "Choose projects to build"
+        End If
+        Me.ProgressBar.Value = 100
+    End Sub
+    Private Sub ReleaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReleaseToolStripMenuItem.Click
+        Me.ProgressBar.Value = 0
+        lblStatus.Text = "Publishing ..."
+        Me.GetLastAndNewVersion()
+        Me.lblStatus.Text = "Last version found : " & LastVersion & "." & LastRevision
+        Refresh()
+        Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{config.Version.PublisherPath}"" /t:clean /t:publish /p:Configuration=Release /p:PublishDir=""{config.Version.PublishPath}""")
+        lblStatus.Text = "Publish successfull"
+        Me.ProgressBar.Value = 100
+    End Sub
     Private Sub RetrieveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RetrieveToolStripMenuItem.Click
         fileList.Clear()
         grd.DataSource = Nothing
@@ -154,6 +174,38 @@ Public Class FrmHome
         End If
     End Sub
 
+    Private Sub GetLastAndNewVersion()
+        Dim xmlDoc As New XmlDocument()
+        xmlDoc.Load(Me.txtPublisher.Text)
+        Dim namespaceManager As New XmlNamespaceManager(xmlDoc.NameTable)
+        namespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003")
+        Dim applicationVersionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationVersion", namespaceManager)
+        Dim ApplicationRevisionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationRevision", namespaceManager)
+
+        If applicationVersionNode IsNot Nothing AndAlso ApplicationRevisionNode IsNot Nothing Then
+            Dim applicationVersion As String = applicationVersionNode.InnerText
+            Dim ApplicationRevision As String = ApplicationRevisionNode.InnerText
+            Dim inputString As String = applicationVersion
+            Dim lastIndex As Integer = inputString.LastIndexOf(".")
+            If lastIndex >= 0 Then
+                Dim result As String = inputString.Substring(0, lastIndex)
+                Me.LastVersion = result
+            Else
+                Me.LastVersion = applicationVersion
+            End If
+            Me.LastRevision = ApplicationRevision
+
+            If Now.Year & "." & DateTime.Now.ToString("MM") & "." & DateTime.Now.ToString("dd") & "." & "%2a" <> applicationVersionNode.InnerText Then
+                applicationVersionNode.InnerText = Now.Year & "." & DateTime.Now.ToString("MM") & "." & DateTime.Now.ToString("dd") & "." & "%2a"
+                ApplicationRevisionNode.InnerText = 1
+            Else
+                ApplicationRevisionNode.InnerText = LastRevision + 1
+            End If
+            xmlDoc.Save(Me.txtPublisher.Text)
+        Else
+            Me.lblStatus.Text = "No ApplicationVersion or ApplicationRevision node found"
+        End If
+    End Sub
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpdateToolStripMenuItem.Click
         Me.FillJson()
     End Sub
@@ -173,24 +225,6 @@ Public Class FrmHome
         Me.txtPath.Text = GetPath(False, Me.txtPath.Text)
         Me.txtVersion.Text = Path.GetFileName(txtPath.Text)
     End Sub
-
-    Private Function GetPath(ByVal _WithFilePath As Boolean, ByVal _Path As String) As String
-        Dim selectedPath As String = _Path
-        Dim folderBrowser As New FolderBrowserDialog
-        Dim openFileDialog As New OpenFileDialog
-
-        folderBrowser.SelectedPath = selectedPath
-        If _WithFilePath Then
-            If openFileDialog.ShowDialog() = DialogResult.OK Then
-                selectedPath = openFileDialog.FileName
-            End If
-        Else
-            If folderBrowser.ShowDialog() = DialogResult.OK Then
-                selectedPath = folderBrowser.SelectedPath
-            End If
-        End If
-        Return selectedPath
-    End Function
     Private Sub BtnCompile_Click(sender As Object, e As EventArgs) Handles BtnCompile.Click
         Me.txtCompile.Text = GetPath(False, Me.txtCompile.Text)
     End Sub

@@ -13,4 +13,6 @@ Public Class Version
     Public Property MagePath As String
     Public Property PublishPath As String
     Public Property ProjectExtension As String
+    Public Property ApplicationRevision As Int32
+    Public Property ApplicationVersion As String
 End Class
