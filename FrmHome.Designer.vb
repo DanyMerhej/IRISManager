@@ -38,11 +38,13 @@ Partial Class FrmHome
         Me.ChangeVersionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UpdateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.RetrieveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.CompileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReferenceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BuildToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ReleaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProgressBar = New System.Windows.Forms.ProgressBar()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtReference = New System.Windows.Forms.TextBox()
@@ -51,8 +53,15 @@ Partial Class FrmHome
         Me.BtnReference = New System.Windows.Forms.Button()
         Me.BtnSolution = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.ReleaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BtnPublisher = New System.Windows.Forms.Button()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.txtPublisher = New System.Windows.Forms.TextBox()
+        Me.BtnPublishTo = New System.Windows.Forms.Button()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.txtPublishTo = New System.Windows.Forms.TextBox()
+        Me.BtnMSBuild = New System.Windows.Forms.Button()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtMSBuild = New System.Windows.Forms.TextBox()
         Me.StatusStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -68,7 +77,7 @@ Partial Class FrmHome
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(11, 31)
+        Me.Label1.Location = New System.Drawing.Point(8, 31)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(42, 13)
         Me.Label1.TabIndex = 1
@@ -77,7 +86,7 @@ Partial Class FrmHome
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(11, 56)
+        Me.Label2.Location = New System.Drawing.Point(8, 55)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(29, 13)
         Me.Label2.TabIndex = 3
@@ -86,7 +95,7 @@ Partial Class FrmHome
         'txtPath
         '
         Me.txtPath.Enabled = False
-        Me.txtPath.Location = New System.Drawing.Point(68, 56)
+        Me.txtPath.Location = New System.Drawing.Point(68, 55)
         Me.txtPath.Name = "txtPath"
         Me.txtPath.Size = New System.Drawing.Size(669, 20)
         Me.txtPath.TabIndex = 2
@@ -94,7 +103,7 @@ Partial Class FrmHome
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(11, 80)
+        Me.Label3.Location = New System.Drawing.Point(8, 79)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(44, 13)
         Me.Label3.TabIndex = 5
@@ -102,7 +111,7 @@ Partial Class FrmHome
         '
         'txtCompile
         '
-        Me.txtCompile.Location = New System.Drawing.Point(68, 80)
+        Me.txtCompile.Location = New System.Drawing.Point(68, 79)
         Me.txtCompile.Name = "txtCompile"
         Me.txtCompile.Size = New System.Drawing.Size(624, 20)
         Me.txtCompile.TabIndex = 4
@@ -110,7 +119,7 @@ Partial Class FrmHome
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(11, 129)
+        Me.Label4.Location = New System.Drawing.Point(8, 127)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(45, 13)
         Me.Label4.TabIndex = 7
@@ -118,7 +127,7 @@ Partial Class FrmHome
         '
         'txtSolution
         '
-        Me.txtSolution.Location = New System.Drawing.Point(68, 129)
+        Me.txtSolution.Location = New System.Drawing.Point(68, 127)
         Me.txtSolution.Name = "txtSolution"
         Me.txtSolution.Size = New System.Drawing.Size(624, 20)
         Me.txtSolution.TabIndex = 6
@@ -127,7 +136,7 @@ Partial Class FrmHome
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(28, 28)
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.lblStatus})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 340)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 332)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 8, 0)
         Me.StatusStrip1.Size = New System.Drawing.Size(749, 22)
@@ -181,17 +190,17 @@ Partial Class FrmHome
         Me.UpdateToolStripMenuItem.Size = New System.Drawing.Size(57, 22)
         Me.UpdateToolStripMenuItem.Text = "Update"
         '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(22, 22)
-        Me.ToolStripMenuItem2.Text = "|"
-        '
         'RetrieveToolStripMenuItem
         '
         Me.RetrieveToolStripMenuItem.Name = "RetrieveToolStripMenuItem"
         Me.RetrieveToolStripMenuItem.Size = New System.Drawing.Size(61, 22)
         Me.RetrieveToolStripMenuItem.Text = "Retrieve"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(22, 22)
+        Me.ToolStripMenuItem2.Text = "|"
         '
         'CompileToolStripMenuItem
         '
@@ -211,11 +220,23 @@ Partial Class FrmHome
         Me.BuildToolStripMenuItem.Size = New System.Drawing.Size(46, 22)
         Me.BuildToolStripMenuItem.Text = "Build"
         '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(22, 22)
+        Me.ToolStripMenuItem1.Text = "|"
+        '
+        'ReleaseToolStripMenuItem
+        '
+        Me.ReleaseToolStripMenuItem.Name = "ReleaseToolStripMenuItem"
+        Me.ReleaseToolStripMenuItem.Size = New System.Drawing.Size(58, 22)
+        Me.ReleaseToolStripMenuItem.Text = "Release"
+        '
         'ProgressBar
         '
         Me.ProgressBar.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ProgressBar.Location = New System.Drawing.Point(0, 335)
-        Me.ProgressBar.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ProgressBar.Location = New System.Drawing.Point(0, 327)
+        Me.ProgressBar.Margin = New System.Windows.Forms.Padding(2)
         Me.ProgressBar.Name = "ProgressBar"
         Me.ProgressBar.Size = New System.Drawing.Size(749, 5)
         Me.ProgressBar.Step = 1
@@ -224,7 +245,7 @@ Partial Class FrmHome
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(11, 105)
+        Me.Label5.Location = New System.Drawing.Point(8, 103)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(57, 13)
         Me.Label5.TabIndex = 13
@@ -232,7 +253,7 @@ Partial Class FrmHome
         '
         'txtReference
         '
-        Me.txtReference.Location = New System.Drawing.Point(68, 105)
+        Me.txtReference.Location = New System.Drawing.Point(68, 103)
         Me.txtReference.Name = "txtReference"
         Me.txtReference.Size = New System.Drawing.Size(624, 20)
         Me.txtReference.TabIndex = 12
@@ -240,17 +261,17 @@ Partial Class FrmHome
         'grd
         '
         Me.grd.FormattingEnabled = True
-        Me.grd.Location = New System.Drawing.Point(68, 152)
-        Me.grd.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.grd.Location = New System.Drawing.Point(68, 225)
+        Me.grd.Margin = New System.Windows.Forms.Padding(2)
         Me.grd.Name = "grd"
         Me.grd.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.grd.Size = New System.Drawing.Size(671, 173)
+        Me.grd.Size = New System.Drawing.Size(671, 95)
         Me.grd.TabIndex = 14
         '
         'BtnCompile
         '
-        Me.BtnCompile.Location = New System.Drawing.Point(692, 80)
-        Me.BtnCompile.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.BtnCompile.Location = New System.Drawing.Point(692, 79)
+        Me.BtnCompile.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnCompile.Name = "BtnCompile"
         Me.BtnCompile.Size = New System.Drawing.Size(47, 20)
         Me.BtnCompile.TabIndex = 17
@@ -259,8 +280,8 @@ Partial Class FrmHome
         '
         'BtnReference
         '
-        Me.BtnReference.Location = New System.Drawing.Point(692, 105)
-        Me.BtnReference.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.BtnReference.Location = New System.Drawing.Point(692, 103)
+        Me.BtnReference.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnReference.Name = "BtnReference"
         Me.BtnReference.Size = New System.Drawing.Size(47, 20)
         Me.BtnReference.TabIndex = 18
@@ -269,8 +290,8 @@ Partial Class FrmHome
         '
         'BtnSolution
         '
-        Me.BtnSolution.Location = New System.Drawing.Point(692, 129)
-        Me.BtnSolution.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.BtnSolution.Location = New System.Drawing.Point(692, 127)
+        Me.BtnSolution.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnSolution.Name = "BtnSolution"
         Me.BtnSolution.Size = New System.Drawing.Size(47, 20)
         Me.BtnSolution.TabIndex = 19
@@ -280,30 +301,105 @@ Partial Class FrmHome
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(11, 152)
+        Me.Label7.Location = New System.Drawing.Point(8, 225)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(45, 13)
         Me.Label7.TabIndex = 21
         Me.Label7.Text = "Projects"
         '
-        'ReleaseToolStripMenuItem
+        'BtnPublisher
         '
-        Me.ReleaseToolStripMenuItem.Name = "ReleaseToolStripMenuItem"
-        Me.ReleaseToolStripMenuItem.Size = New System.Drawing.Size(58, 22)
-        Me.ReleaseToolStripMenuItem.Text = "Release"
+        Me.BtnPublisher.Location = New System.Drawing.Point(692, 151)
+        Me.BtnPublisher.Margin = New System.Windows.Forms.Padding(2)
+        Me.BtnPublisher.Name = "BtnPublisher"
+        Me.BtnPublisher.Size = New System.Drawing.Size(47, 20)
+        Me.BtnPublisher.TabIndex = 24
+        Me.BtnPublisher.Text = "..."
+        Me.BtnPublisher.UseVisualStyleBackColor = True
         '
-        'ToolStripMenuItem1
+        'Label6
         '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(22, 22)
-        Me.ToolStripMenuItem1.Text = "|"
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(8, 151)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(50, 13)
+        Me.Label6.TabIndex = 23
+        Me.Label6.Text = "Publisher"
+        '
+        'txtPublisher
+        '
+        Me.txtPublisher.Location = New System.Drawing.Point(68, 151)
+        Me.txtPublisher.Name = "txtPublisher"
+        Me.txtPublisher.Size = New System.Drawing.Size(624, 20)
+        Me.txtPublisher.TabIndex = 22
+        '
+        'BtnPublishTo
+        '
+        Me.BtnPublishTo.Location = New System.Drawing.Point(692, 175)
+        Me.BtnPublishTo.Margin = New System.Windows.Forms.Padding(2)
+        Me.BtnPublishTo.Name = "BtnPublishTo"
+        Me.BtnPublishTo.Size = New System.Drawing.Size(47, 20)
+        Me.BtnPublishTo.TabIndex = 27
+        Me.BtnPublishTo.Text = "..."
+        Me.BtnPublishTo.UseVisualStyleBackColor = True
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(8, 175)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(57, 13)
+        Me.Label8.TabIndex = 26
+        Me.Label8.Text = "Publish To"
+        '
+        'txtPublishTo
+        '
+        Me.txtPublishTo.Location = New System.Drawing.Point(68, 175)
+        Me.txtPublishTo.Name = "txtPublishTo"
+        Me.txtPublishTo.Size = New System.Drawing.Size(624, 20)
+        Me.txtPublishTo.TabIndex = 25
+        '
+        'BtnMSBuild
+        '
+        Me.BtnMSBuild.Location = New System.Drawing.Point(692, 199)
+        Me.BtnMSBuild.Margin = New System.Windows.Forms.Padding(2)
+        Me.BtnMSBuild.Name = "BtnMSBuild"
+        Me.BtnMSBuild.Size = New System.Drawing.Size(47, 20)
+        Me.BtnMSBuild.TabIndex = 30
+        Me.BtnMSBuild.Text = "..."
+        Me.BtnMSBuild.UseVisualStyleBackColor = True
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(8, 199)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(46, 13)
+        Me.Label9.TabIndex = 29
+        Me.Label9.Text = "MSBuild"
+        '
+        'txtMSBuild
+        '
+        Me.txtMSBuild.Location = New System.Drawing.Point(68, 199)
+        Me.txtMSBuild.Name = "txtMSBuild"
+        Me.txtMSBuild.Size = New System.Drawing.Size(624, 20)
+        Me.txtMSBuild.TabIndex = 28
         '
         'FrmHome
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.ClientSize = New System.Drawing.Size(749, 362)
+        Me.ClientSize = New System.Drawing.Size(749, 354)
+        Me.Controls.Add(Me.BtnMSBuild)
+        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.txtMSBuild)
+        Me.Controls.Add(Me.BtnPublishTo)
+        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.txtPublishTo)
+        Me.Controls.Add(Me.BtnPublisher)
+        Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.txtPublisher)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.BtnSolution)
         Me.Controls.Add(Me.BtnReference)
@@ -323,7 +419,7 @@ Partial Class FrmHome
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtVersion)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MinimumSize = New System.Drawing.Size(397, 211)
+        Me.MinimumSize = New System.Drawing.Size(393, 199)
         Me.Name = "FrmHome"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Home"
@@ -367,4 +463,13 @@ Partial Class FrmHome
     Friend WithEvents Label7 As Label
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ReleaseToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BtnPublisher As Button
+    Friend WithEvents Label6 As Label
+    Friend WithEvents txtPublisher As TextBox
+    Friend WithEvents BtnPublishTo As Button
+    Friend WithEvents Label8 As Label
+    Friend WithEvents txtPublishTo As TextBox
+    Friend WithEvents BtnMSBuild As Button
+    Friend WithEvents Label9 As Label
+    Friend WithEvents txtMSBuild As TextBox
 End Class

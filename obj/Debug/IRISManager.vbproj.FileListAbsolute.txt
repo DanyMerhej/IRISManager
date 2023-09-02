@@ -41,8 +41,6 @@ C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.exe.config
 C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.exe
 C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.pdb
 C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.xml
-C:\src\IRISManager\IRISManager\bin\Debug\Newtonsoft.Json.dll
-C:\src\IRISManager\IRISManager\bin\Debug\Newtonsoft.Json.xml
 C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.vbproj.AssemblyReference.cache
 C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.FrmHome.resources
 C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.Resources.resources

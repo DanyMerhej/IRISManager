@@ -7,7 +7,7 @@ Public Class FrmHome
     Dim config As Variables
     Dim fileList As New List(Of String)
     Dim ConfigPath As String = Application.StartupPath & "\Config\appsettings.json"
-    Dim targetExtension As String = ".vbproj"
+    Dim targetExtension As String
     Private Sub FrmHome_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblStatus.Text = "Ready"
         ProgressBar.Maximum = 100
@@ -21,6 +21,10 @@ Public Class FrmHome
         Me.txtCompile.Text = config.Version.VersionCompilePath
         Me.txtReference.Text = config.Version.VersionReferencePath
         Me.txtSolution.Text = config.Version.VersionMainSolutionPath
+        Me.txtPublisher.Text = config.Version.PublisherPath
+        Me.txtPublishTo.Text = config.Version.PublishPath
+        Me.txtMSBuild.Text = config.Version.MSBuildPath
+        Me.targetExtension = config.Version.ProjectExtension
     End Sub
     Private Sub FillJson()
         Try
@@ -30,6 +34,10 @@ Public Class FrmHome
             config.Version.VersionCompilePath = Me.txtCompile.Text
             config.Version.VersionReferencePath = Me.txtReference.Text
             config.Version.VersionMainSolutionPath = Me.txtSolution.Text
+            config.Version.PublisherPath = Me.txtPublisher.Text
+            config.Version.PublishPath = Me.txtPublishTo.Text
+            config.Version.MSBuildPath = Me.txtMSBuild.Text
+            config.Version.ProjectExtension = Me.targetExtension
             Dim updatedJson As String = JsonConvert.SerializeObject(config, Xml.Formatting.Indented)
             File.WriteAllText(ConfigPath, updatedJson)
             Me.ProgressBar.Value = 100
@@ -72,7 +80,7 @@ Public Class FrmHome
                 lblStatus.Text = "Choose projects before proceeding"
             End If
         Else
-                lblStatus.Text = "Please retrieve and choose the projects to process"
+            lblStatus.Text = "Please retrieve and choose the projects to process"
         End If
         Me.ProgressBar.Value = 100
     End Sub
@@ -92,8 +100,7 @@ Public Class FrmHome
             lblStatus.Text = "Error occured while retrieving files" & vbCrLf & ex.Message
         End Try
     End Sub
-
-    Private Sub Build(processStartInfo As ProcessStartInfo)
+    Private Sub ChangeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BuildToolStripMenuItem.Click
         Me.ProgressBar.Value = 0
         If grd.Items.Count > 0 Then
             lblStatus.Text = "Building ..."
@@ -101,31 +108,38 @@ Public Class FrmHome
             For Each selectedItem As Object In grd.SelectedItems
                 Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
                 Dim projectPath As String = selectedItem
-                processStartInfo.FileName = config.Version.MSBuildPath
-                processStartInfo.Arguments = $"""{projectPath}"" /t:Rebuild /p:Configuration=Debug"
-
-                processStartInfo.RedirectStandardOutput = True
-                processStartInfo.RedirectStandardError = True
-                processStartInfo.UseShellExecute = False
-                processStartInfo.CreateNoWindow = True
-
-                Using process As New Process()
-                    process.StartInfo = processStartInfo
-                    process.Start()
-
-                    Dim output As String = process.StandardOutput.ReadToEnd()
-                    Dim errorOutput As String = process.StandardError.ReadToEnd()
-
-                    process.WaitForExit()
-                End Using
-
-                lblStatus.Text = "Build successfull" '($"Output: {output}{vbCrLf}Error: {errorOutput}")
+                Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{projectPath}"" /t:Rebuild /p:Configuration=Debug")
+                lblStatus.Text = "Build successfull"
             Next
         Else
             lblStatus.Text = "Choose projects to build"
         End If
         Me.ProgressBar.Value = 100
-        'lblStatus.Text = "Build successfull"
+    End Sub
+
+    Private Sub ReleaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReleaseToolStripMenuItem.Click
+        Me.ProgressBar.Value = 0
+        lblStatus.Text = "Publishing ..."
+        Refresh()
+        Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{config.Version.PublisherPath}"" /t:clean /t:publish /p:Configuration=Release /p:PublishDir=""{config.Version.PublishPath}""")
+        lblStatus.Text = "Publish successfull"
+        Me.ProgressBar.Value = 100
+    End Sub
+    Private Sub ExecuteCmdCommand(processStartInfo As ProcessStartInfo, ByVal _FileName As String, ByVal _Arguments As String)
+        processStartInfo.FileName = _FileName
+        processStartInfo.Arguments = _Arguments
+        processStartInfo.RedirectStandardOutput = True
+        processStartInfo.RedirectStandardError = True
+        processStartInfo.UseShellExecute = False
+        processStartInfo.CreateNoWindow = True
+
+        Using process As New Process()
+            process.StartInfo = processStartInfo
+            process.Start()
+            Dim output As String = process.StandardOutput.ReadToEnd()
+            Dim errorOutput As String = process.StandardError.ReadToEnd()
+            process.WaitForExit()
+        End Using
     End Sub
     Private Sub RetrieveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RetrieveToolStripMenuItem.Click
         fileList.Clear()
@@ -155,9 +169,6 @@ Public Class FrmHome
     Private Sub ReferenceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReferenceToolStripMenuItem.Click
         Me.ChangeCompileReferencePath("Reference")
     End Sub
-    Private Sub ChangeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BuildToolStripMenuItem.Click
-        Me.Build(New ProcessStartInfo())
-    End Sub
     Private Sub ChangeVersionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ChangeVersionToolStripMenuItem.Click
         Me.txtPath.Text = GetPath(False, Me.txtPath.Text)
         Me.txtVersion.Text = Path.GetFileName(txtPath.Text)
@@ -183,15 +194,21 @@ Public Class FrmHome
     Private Sub BtnCompile_Click(sender As Object, e As EventArgs) Handles BtnCompile.Click
         Me.txtCompile.Text = GetPath(False, Me.txtCompile.Text)
     End Sub
-
     Private Sub BtnReference_Click(sender As Object, e As EventArgs) Handles BtnReference.Click
         Me.txtReference.Text = GetPath(False, Me.txtReference.Text)
     End Sub
-
     Private Sub BtnSolution_Click(sender As Object, e As EventArgs) Handles BtnSolution.Click
         Me.txtSolution.Text = GetPath(True, Me.txtSolution.Text)
     End Sub
-
+    Private Sub BtnPublisher_Click(sender As Object, e As EventArgs) Handles BtnPublisher.Click
+        Me.txtPublisher.Text = GetPath(True, Me.txtPublisher.Text)
+    End Sub
+    Private Sub BtnPublishTo_Click(sender As Object, e As EventArgs) Handles BtnPublishTo.Click
+        Me.txtPublishTo.Text = GetPath(False, Me.txtPublishTo.Text)
+    End Sub
+    Private Sub BtnMSBuild_Click(sender As Object, e As EventArgs) Handles BtnMSBuild.Click
+        Me.txtMSBuild.Text = GetPath(True, Me.txtMSBuild.Text)
+    End Sub
     Private Sub Grd_DoubleClick(sender As Object, e As EventArgs) Handles grd.DoubleClick
         If grd.SelectedItems IsNot Nothing Then
             Dim selectedPath As String = grd.SelectedItem.ToString
@@ -199,39 +216,5 @@ Public Class FrmHome
             Process.Start("explorer.exe", directoryPath)
         End If
     End Sub
-    Private Sub ReleaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReleaseToolStripMenuItem.Click
-        Dim ProcessStartInfo As New ProcessStartInfo()
-        Me.ProgressBar.Value = 0
-        If grd.Items.Count > 0 Then
-            lblStatus.Text = "Building ..."
-            Refresh()
-            For Each selectedItem As Object In grd.SelectedItems
-                Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
-                Dim projectPath As String = selectedItem
-                ProcessStartInfo.FileName = config.Version.MSBuildPath
-                ProcessStartInfo.Arguments = $"""{projectPath}"" /t:Publish /p:Configuration=Debug"
 
-                ProcessStartInfo.RedirectStandardOutput = True
-                ProcessStartInfo.RedirectStandardError = True
-                ProcessStartInfo.UseShellExecute = False
-                ProcessStartInfo.CreateNoWindow = True
-
-                Using process As New Process()
-                    process.StartInfo = ProcessStartInfo
-                    process.Start()
-
-                    Dim output As String = process.StandardOutput.ReadToEnd()
-                    Dim errorOutput As String = process.StandardError.ReadToEnd()
-
-                    process.WaitForExit()
-                End Using
-
-                lblStatus.Text = "Build successfull" '($"Output: {output}{vbCrLf}Error: {errorOutput}")
-            Next
-        Else
-            lblStatus.Text = "Choose projects to build"
-        End If
-        Me.ProgressBar.Value = 100
-        'lblStatus.Text = "Build successfull"
-    End Sub
 End Class

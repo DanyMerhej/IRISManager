@@ -8,7 +8,9 @@ Public Class Version
     Public Property VersionCompilePath As String
     Public Property VersionReferencePath As String
     Public Property VersionMainSolutionPath As String
+    Public Property PublisherPath As String
     Public Property MSBuildPath As String
     Public Property MagePath As String
     Public Property PublishPath As String
+    Public Property ProjectExtension As String
 End Class
