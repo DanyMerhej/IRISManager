@@ -1,0 +1,54 @@
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\IRISManager.exe.config
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\IRISManager.exe
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\IRISManager.pdb
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\IRISManager.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.vbproj.AssemblyReference.cache
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.FrmHome.resources
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.Resources.resources
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.vbproj.GenerateResource.cache
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.vbproj.CoreCompileInputs.cache
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.exe
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.pdb
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\DLLS\IRISManager.exe.config
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\DLLS\IRISManager.exe
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\DLLS\IRISManager.pdb
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\DLLS\IRISManager.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.FrmHome.resources
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.Resources.resources
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.GenerateResource.cache
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.CoreCompileInputs.cache
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.exe
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.pdb
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.CopyComplete
+C:\src\IRISManagerApp\DLLS\IRISManager.exe.config
+C:\src\IRISManagerApp\DLLS\IRISManager.exe
+C:\src\IRISManagerApp\DLLS\IRISManager.pdb
+C:\src\IRISManagerApp\DLLS\IRISManager.xml
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.AssemblyReference.cache
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.SuggestedBindingRedirects.cache
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.FrmHome.resources
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.Resources.resources
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.GenerateResource.cache
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.CoreCompileInputs.cache
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.CopyComplete
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.exe
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.xml
+C:\src\IRISManagerApp\IRISManager\obj\Debug\IRISManager.pdb
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManagerApp\IRISManager\obj\Debug\IRISManager.vbproj.AssemblyReference.cache
+C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.exe.config
+C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.exe
+C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.pdb
+C:\src\IRISManager\IRISManager\bin\Debug\IRISManager.xml
+C:\src\IRISManager\IRISManager\bin\Debug\Newtonsoft.Json.dll
+C:\src\IRISManager\IRISManager\bin\Debug\Newtonsoft.Json.xml
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.vbproj.AssemblyReference.cache
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.FrmHome.resources
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.Resources.resources
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.vbproj.GenerateResource.cache
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.vbproj.CoreCompileInputs.cache
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.vbproj.CopyComplete
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.exe
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.xml
+C:\src\IRISManager\IRISManager\obj\Debug\IRISManager.pdb
