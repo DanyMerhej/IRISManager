@@ -2,46 +2,57 @@
 Imports System.Xml
 Imports Newtonsoft.Json
 Imports System.Diagnostics
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+
 Public Class FrmHome
     Dim json As String
     Dim config As Variables
     Dim fileList As New List(Of String)
-    Dim ConfigPath As String = Application.StartupPath & "\Config\appsettings.json"
+    Dim jsonFolderPath As String = "Config"
+    Dim MainJSONFile As String = "appsettings.json"
+    Dim ConfigPath As String = Application.StartupPath & "\" & jsonFolderPath & "\" & MainJSONFile
+    Dim jsonFiles As String()
     Dim targetExtension As String
     Dim LastVersion As String
+    Dim NewVersion As String
     Dim LastRevision As Int32
+    Dim NewRevision As Int32
     Private Sub FrmHome_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblStatus.Text = "Ready"
         ProgressBar.Maximum = 100
         json = File.ReadAllText(ConfigPath)
         config = JsonConvert.DeserializeObject(Of Variables)(json)
-        Me.FillTextBoxes()
+        Dim jsonFiles = Directory.GetFiles(Application.StartupPath & "\" & jsonFolderPath, "*.json").
+        Where(Function(file) Path.GetFileName(file) <> MainJSONFile).ToArray()
+        ToolStripComboBoxRelease.Items.AddRange(jsonFiles.Select(Function(file) Path.GetFileName(file)).ToArray())
+        'ToolStripComboBoxRelease.SelectedItem = MainJSONFile
+        Me.FillTextBoxes(config)
     End Sub
-    Private Sub FillTextBoxes()
-        Me.txtVersion.Text = config.Version.VersionName
-        Me.txtPath.Text = config.Version.VersionPath
-        Me.txtCompile.Text = config.Version.VersionCompilePath
-        Me.txtReference.Text = config.Version.VersionReferencePath
-        Me.txtSolution.Text = config.Version.VersionMainSolutionPath
-        Me.txtPublisher.Text = config.Version.PublisherPath
-        Me.txtPublishTo.Text = config.Version.PublishPath
-        Me.txtMSBuild.Text = config.Version.MSBuildPath
-        Me.targetExtension = config.Version.ProjectExtension
+    Private Sub FillTextBoxes(ByVal _Json As Variables)
+        Me.txtVersion.Text = _Json.Version.VersionName
+        Me.txtPath.Text = _Json.Version.VersionPath
+        Me.txtCompile.Text = _Json.Version.VersionCompilePath
+        Me.txtReference.Text = _Json.Version.VersionReferencePath
+        Me.txtSolution.Text = _Json.Version.VersionMainSolutionPath
+        Me.txtPublisher.Text = _Json.Version.PublisherPath
+        Me.txtPublishTo.Text = _Json.Version.PublishPath
+        Me.txtMSBuild.Text = _Json.Version.MSBuildPath
+        Me.targetExtension = _Json.Version.ProjectExtension
     End Sub
-    Private Sub FillJson()
+    Private Sub FillJson(ByVal _Json As Variables, ByVal _Path As String)
         Try
             Me.ProgressBar.Value = 0
-            config.Version.VersionName = Me.txtVersion.Text
-            config.Version.VersionPath = Me.txtPath.Text
-            config.Version.VersionCompilePath = Me.txtCompile.Text
-            config.Version.VersionReferencePath = Me.txtReference.Text
-            config.Version.VersionMainSolutionPath = Me.txtSolution.Text
-            config.Version.PublisherPath = Me.txtPublisher.Text
-            config.Version.PublishPath = Me.txtPublishTo.Text
-            config.Version.MSBuildPath = Me.txtMSBuild.Text
-            config.Version.ProjectExtension = Me.targetExtension
-            Dim updatedJson As String = JsonConvert.SerializeObject(config, Xml.Formatting.Indented)
-            File.WriteAllText(ConfigPath, updatedJson)
+            _Json.Version.VersionName = Me.txtVersion.Text
+            _Json.Version.VersionPath = Me.txtPath.Text
+            _Json.Version.VersionCompilePath = Me.txtCompile.Text
+            _Json.Version.VersionReferencePath = Me.txtReference.Text
+            _Json.Version.VersionMainSolutionPath = Me.txtSolution.Text
+            _Json.Version.PublisherPath = Me.txtPublisher.Text
+            _Json.Version.PublishPath = Me.txtPublishTo.Text
+            _Json.Version.MSBuildPath = Me.txtMSBuild.Text
+            _Json.Version.ProjectExtension = Me.targetExtension
+            Dim updatedJson As String = JsonConvert.SerializeObject(_Json, Xml.Formatting.Indented)
+            File.WriteAllText(_Path, updatedJson)
             Me.ProgressBar.Value = 100
             lblStatus.Text = "New JSON saved successfully"
         Catch ex As Exception
@@ -157,6 +168,21 @@ Public Class FrmHome
         Me.GetLastAndNewVersion()
         Me.lblStatus.Text = "Last version found : " & LastVersion & "." & LastRevision
         Refresh()
+
+        config.Version.ApplicationRevision = Me.NewRevision
+        config.Version.ApplicationVersion = Me.NewVersion
+        FillJson(config, ConfigPath)
+
+        If ToolStripComboBoxRelease.SelectedItem IsNot Nothing Then
+            Dim selectedFileName As String = ToolStripComboBoxRelease.SelectedItem.ToString()
+            Dim selectedFilePath As String = Path.Combine(jsonFolderPath, selectedFileName)
+            Dim jsonData As String = File.ReadAllText(selectedFilePath)
+            Dim deserializedData As Variables = JsonConvert.DeserializeObject(Of Variables)(jsonData)
+            deserializedData.Version.ApplicationRevision = Me.NewRevision
+            deserializedData.Version.ApplicationVersion = Me.NewVersion
+            Me.FillJson(deserializedData, selectedFilePath)
+        End If
+
         Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{config.Version.PublisherPath}"" /t:clean /t:publish /p:Configuration=Release /p:PublishDir=""{config.Version.PublishPath}""")
         lblStatus.Text = "Publish successfull"
         Me.ProgressBar.Value = 100
@@ -201,13 +227,31 @@ Public Class FrmHome
             Else
                 ApplicationRevisionNode.InnerText = LastRevision + 1
             End If
+            Me.NewVersion = applicationVersionNode.InnerText
+            Me.NewRevision = ApplicationRevisionNode.InnerText
             xmlDoc.Save(Me.txtPublisher.Text)
         Else
             Me.lblStatus.Text = "No ApplicationVersion or ApplicationRevision node found"
         End If
     End Sub
+    Private Sub ToolStripComboBoxRelease_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ToolStripComboBoxRelease.SelectedIndexChanged
+        If ToolStripComboBoxRelease.SelectedItem IsNot Nothing Then
+            Dim selectedFileName As String = ToolStripComboBoxRelease.SelectedItem.ToString()
+            Dim selectedFilePath As String = Path.Combine(jsonFolderPath, selectedFileName)
+            Try
+                Dim jsonData As String = File.ReadAllText(selectedFilePath)
+                Dim deserializedData As Variables = JsonConvert.DeserializeObject(Of Variables)(jsonData)
+                Me.FillTextBoxes(deserializedData)
+                Me.FillJson(deserializedData, selectedFilePath)
+            Catch ex As Exception
+                lblStatus.Text = "Error reading JSON file: " & ex.Message
+            End Try
+        Else
+            lblStatus.Text = "Please select a JSON file from the list."
+        End If
+    End Sub
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpdateToolStripMenuItem.Click
-        Me.FillJson()
+        Me.FillJson(config, ConfigPath)
     End Sub
     Private Sub OpenJSONToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenJSONToolStripMenuItem.Click
         Process.Start(ConfigPath)
