@@ -164,28 +164,30 @@ Public Class FrmHome
     End Sub
     Private Sub ReleaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReleaseToolStripMenuItem.Click
         Me.ProgressBar.Value = 0
-        lblStatus.Text = "Publishing ..."
-        Me.GetLastAndNewVersion()
-        Me.lblStatus.Text = "Last version found : " & LastVersion & "." & LastRevision
-        Refresh()
+        Me.lblStatus.Text = "Publishing ..."
+        Me.lblStatus.Text = Me.GetLastAndNewVersion()
+        If Me.lblStatus.Text = "" Then
+            Me.lblStatus.Text = "Last version found : " & LastVersion & "." & LastRevision
+            Refresh()
 
-        config.Version.ApplicationRevision = Me.NewRevision
-        config.Version.ApplicationVersion = Me.NewVersion
-        FillJson(config, ConfigPath)
+            config.Version.ApplicationRevision = Me.NewRevision
+            config.Version.ApplicationVersion = Me.NewVersion
+            FillJson(config, ConfigPath)
 
-        If ToolStripComboBoxRelease.SelectedItem IsNot Nothing Then
-            Dim selectedFileName As String = ToolStripComboBoxRelease.SelectedItem.ToString()
-            Dim selectedFilePath As String = Path.Combine(jsonFolderPath, selectedFileName)
-            Dim jsonData As String = File.ReadAllText(selectedFilePath)
-            Dim deserializedData As Variables = JsonConvert.DeserializeObject(Of Variables)(jsonData)
-            deserializedData.Version.ApplicationRevision = Me.NewRevision
-            deserializedData.Version.ApplicationVersion = Me.NewVersion
-            Me.FillJson(deserializedData, selectedFilePath)
+            If ToolStripComboBoxRelease.SelectedItem IsNot Nothing Then
+                Dim selectedFileName As String = ToolStripComboBoxRelease.SelectedItem.ToString()
+                Dim selectedFilePath As String = Path.Combine(jsonFolderPath, selectedFileName)
+                Dim jsonData As String = File.ReadAllText(selectedFilePath)
+                Dim deserializedData As Variables = JsonConvert.DeserializeObject(Of Variables)(jsonData)
+                deserializedData.Version.ApplicationRevision = Me.NewRevision
+                deserializedData.Version.ApplicationVersion = Me.NewVersion
+                Me.FillJson(deserializedData, selectedFilePath)
+            End If
+
+            Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{config.Version.PublisherPath}"" /t:clean /t:publish /p:Configuration=Release /p:PublishDir=""{config.Version.PublishPath}""")
+            lblStatus.Text = "Publish successfull"
+            Me.ProgressBar.Value = 100
         End If
-
-        Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{config.Version.PublisherPath}"" /t:clean /t:publish /p:Configuration=Release /p:PublishDir=""{config.Version.PublishPath}""")
-        lblStatus.Text = "Publish successfull"
-        Me.ProgressBar.Value = 100
     End Sub
     Private Sub RetrieveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RetrieveToolStripMenuItem.Click
         fileList.Clear()
@@ -200,40 +202,46 @@ Public Class FrmHome
         End If
     End Sub
 
-    Private Sub GetLastAndNewVersion()
-        Dim xmlDoc As New XmlDocument()
-        xmlDoc.Load(Me.txtPublisher.Text)
-        Dim namespaceManager As New XmlNamespaceManager(xmlDoc.NameTable)
-        namespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003")
-        Dim applicationVersionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationVersion", namespaceManager)
-        Dim ApplicationRevisionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationRevision", namespaceManager)
+    Private Function GetLastAndNewVersion() As String
+        Try
+            Dim xmlDoc As New XmlDocument()
+            xmlDoc.Load(Me.txtPublisher.Text)
+            Dim namespaceManager As New XmlNamespaceManager(xmlDoc.NameTable)
+            namespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003")
+            Dim applicationVersionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationVersion", namespaceManager)
+            Dim ApplicationRevisionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationRevision", namespaceManager)
 
-        If applicationVersionNode IsNot Nothing AndAlso ApplicationRevisionNode IsNot Nothing Then
-            Dim applicationVersion As String = applicationVersionNode.InnerText
-            Dim ApplicationRevision As String = ApplicationRevisionNode.InnerText
-            Dim inputString As String = applicationVersion
-            Dim lastIndex As Integer = inputString.LastIndexOf(".")
-            If lastIndex >= 0 Then
-                Dim result As String = inputString.Substring(0, lastIndex)
-                Me.LastVersion = result
-            Else
-                Me.LastVersion = applicationVersion
-            End If
-            Me.LastRevision = ApplicationRevision
+            If applicationVersionNode IsNot Nothing AndAlso ApplicationRevisionNode IsNot Nothing Then
+                Dim applicationVersion As String = applicationVersionNode.InnerText
+                Dim ApplicationRevision As String = ApplicationRevisionNode.InnerText
+                Dim inputString As String = applicationVersion
+                Dim lastIndex As Integer = inputString.LastIndexOf(".")
+                If lastIndex >= 0 Then
+                    Dim result As String = inputString.Substring(0, lastIndex)
+                    Me.LastVersion = result
+                Else
+                    Me.LastVersion = applicationVersion
+                End If
+                Me.LastRevision = ApplicationRevision
 
-            If Now.Year & "." & DateTime.Now.ToString("MM") & "." & DateTime.Now.ToString("dd") & "." & "%2a" <> applicationVersionNode.InnerText Then
-                applicationVersionNode.InnerText = Now.Year & "." & DateTime.Now.ToString("MM") & "." & DateTime.Now.ToString("dd") & "." & "%2a"
-                ApplicationRevisionNode.InnerText = 1
+                If Now.Year & "." & DateTime.Now.ToString("MM") & "." & DateTime.Now.ToString("dd") & "." & "%2a" <> applicationVersionNode.InnerText Then
+                    applicationVersionNode.InnerText = Now.Year & "." & DateTime.Now.ToString("MM") & "." & DateTime.Now.ToString("dd") & "." & "%2a"
+                    ApplicationRevisionNode.InnerText = 1
+                Else
+                    ApplicationRevisionNode.InnerText = LastRevision + 1
+                End If
+                Me.NewVersion = applicationVersionNode.InnerText
+                Me.NewRevision = ApplicationRevisionNode.InnerText
+                xmlDoc.Save(Me.txtPublisher.Text)
             Else
-                ApplicationRevisionNode.InnerText = LastRevision + 1
+                Return "No ApplicationVersion or ApplicationRevision node found"
             End If
-            Me.NewVersion = applicationVersionNode.InnerText
-            Me.NewRevision = ApplicationRevisionNode.InnerText
-            xmlDoc.Save(Me.txtPublisher.Text)
-        Else
-            Me.lblStatus.Text = "No ApplicationVersion or ApplicationRevision node found"
-        End If
-    End Sub
+
+        Catch ex As Exception
+            Return ex.Message
+        End Try
+        Return ""
+    End Function
     Private Sub ToolStripComboBoxRelease_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ToolStripComboBoxRelease.SelectedIndexChanged
         If ToolStripComboBoxRelease.SelectedItem IsNot Nothing Then
             Dim selectedFileName As String = ToolStripComboBoxRelease.SelectedItem.ToString()

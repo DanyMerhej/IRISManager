@@ -162,7 +162,7 @@ Partial Class FrmHome
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.UpdateToolStripMenuItem, Me.RetrieveToolStripMenuItem, Me.ToolStripMenuItem2, Me.CompileToolStripMenuItem, Me.ReferenceToolStripMenuItem, Me.BuildToolStripMenuItem, Me.ToolStripMenuItem1, Me.ReleaseToolStripMenuItem, Me.ToolStripComboBoxRelease})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1373, 42)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1373, 46)
         Me.MenuStrip1.TabIndex = 10
         Me.MenuStrip1.Text = "MenuStrip1"
         '
