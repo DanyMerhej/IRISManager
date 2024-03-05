@@ -1,0 +1,7 @@
+Version number: 2023_12_15_4
+Date: 2023/12/15 14:21:48
+
+Updated Files:
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_15_4\Pixel.Iris2.Publisher.exe.deploy - Updated on 12/15/2023 2:20:46 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_15_4\Pixel.Iris2.Publisher.exe.manifest - Updated on 12/15/2023 2:20:48 PM
+

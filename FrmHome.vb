@@ -3,20 +3,27 @@ Imports System.Xml
 Imports Newtonsoft.Json
 Imports System.Diagnostics
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports System.Security.Cryptography
 
 Public Class FrmHome
     Dim json As String
     Dim config As Variables
     Dim fileList As New List(Of String)
     Dim jsonFolderPath As String = "Config"
+    Dim LogFolderPath As String = "Log"
     Dim MainJSONFile As String = "appsettings.json"
     Dim ConfigPath As String = Application.StartupPath & "\" & jsonFolderPath & "\" & MainJSONFile
+    Dim LogPath As String = Application.StartupPath & "\" & LogFolderPath
     Dim jsonFiles As String()
     Dim targetExtension As String
     Dim LastVersion As String
     Dim NewVersion As String
     Dim LastRevision As Int32
     Dim NewRevision As Int32
+    Dim LogVersion As String
+    Private Const OutputParameter As String = "Output"
+    Private Const ReferenceParameter As String = "Reference"
+
     Private Sub FrmHome_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblStatus.Text = "Ready"
         ProgressBar.Maximum = 100
@@ -61,42 +68,45 @@ Public Class FrmHome
     End Sub
     Private Sub ChangeCompileReferencePath(ByVal _Parameter As String)
         Me.ProgressBar.Value = 0
-        If grd.Items.Count > 0 Then
-            If grd.SelectedItems.Count > 0 Then
-                For Each selectedItem As Object In grd.SelectedItems
-                    If File.Exists(selectedItem) Then
-                        Dim xmlDoc As New XmlDocument()
-                        xmlDoc.Load(selectedItem)
 
-                        Dim nsMgr As New XmlNamespaceManager(xmlDoc.NameTable)
-                        nsMgr.AddNamespace("ns", xmlDoc.DocumentElement.NamespaceURI)
-
-                        Dim outputReferencePathNode As XmlNode = xmlDoc.SelectSingleNode("//ns:" & _Parameter & "Path", nsMgr)
-
-                        If outputReferencePathNode IsNot Nothing Then
-                            If _Parameter = "Output" Then
-                                outputReferencePathNode.InnerText = Me.txtCompile.Text
-                            ElseIf _Parameter = "Reference" Then
-                                outputReferencePathNode.InnerText = Me.txtReference.Text
-                            End If
-                            xmlDoc.Save(selectedItem)
-                            Me.ProgressBar.Value += 100 \ fileList.Count
-                        Else
-                            lblStatus.Text = _Parameter & " path not found"
-                        End If
-                    Else
-                        lblStatus.Text = "Project file not found"
+        If grd.Items.Count > 0 AndAlso grd.SelectedItems.Count > 0 Then
+            For Each selectedItem As Object In grd.SelectedItems
+                If File.Exists(selectedItem) Then
+                    Dim projectXml As New XmlDocument()
+                    projectXml.Load(selectedItem)
+                    Dim userProjectPath As String = Path.ChangeExtension(selectedItem, ".vbproj.user")
+                    Dim userProjectXml As New XmlDocument()
+                    If File.Exists(userProjectPath) Then
+                        userProjectXml.Load(userProjectPath)
                     End If
-                Next
-                lblStatus.Text = _Parameter & " path updated successfully"
-            Else
-                lblStatus.Text = "Choose projects before proceeding"
-            End If
+                    Dim outputPathNode As XmlNode = projectXml.SelectSingleNode("//ns:" & OutputParameter & "Path", GetNamespaceManager(projectXml))
+                    If outputPathNode IsNot Nothing Then
+                        outputPathNode.InnerText = Me.txtCompile.Text
+                    End If
+                    Dim referencePathNode As XmlNode = userProjectXml.SelectSingleNode("//ns:" & ReferenceParameter & "Path", GetNamespaceManager(userProjectXml))
+                    If referencePathNode IsNot Nothing Then
+                        referencePathNode.InnerText = Me.txtReference.Text
+                    End If
+                    projectXml.Save(selectedItem)
+                    userProjectXml.Save(userProjectPath)
+                    Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
+                Else
+                    lblStatus.Text = "Project file not found"
+                End If
+            Next
+            lblStatus.Text = "Paths updated successfully"
         Else
-            lblStatus.Text = "Please retrieve and choose the projects to process"
+            lblStatus.Text = "Choose projects before proceeding"
         End If
+
         Me.ProgressBar.Value = 100
     End Sub
+
+    Private Function GetNamespaceManager(ByVal xmlDoc As XmlDocument) As XmlNamespaceManager
+        Dim nsMgr As New XmlNamespaceManager(xmlDoc.NameTable)
+        nsMgr.AddNamespace("ns", xmlDoc.DocumentElement.NamespaceURI)
+        Return nsMgr
+    End Function
 
     Sub ProcessFiles(folderPath As String, extension As String)
         Try
@@ -186,6 +196,11 @@ Public Class FrmHome
 
             Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{config.Version.PublisherPath}"" /t:clean /t:publish /p:Configuration=Release /p:PublishDir=""{config.Version.PublishPath}""")
             lblStatus.Text = "Publish successfull"
+
+
+            Me.WriteLog()
+            lblStatus.Text &= " / Logged in: " & Me.LogVersion
+
             Me.ProgressBar.Value = 100
         End If
     End Sub
@@ -195,7 +210,7 @@ Public Class FrmHome
         Me.ProcessFiles(Me.txtPath.Text, targetExtension)
         If fileList.Count > 0 Then
             grd.DataSource = fileList
-            lblStatus.Text = "found a new list to process"
+            lblStatus.Text = "Found a new list to process"
         Else
             grd.DataSource = Nothing
             lblStatus.Text = "Nothing found"
@@ -204,6 +219,7 @@ Public Class FrmHome
 
     Private Function GetLastAndNewVersion() As String
         Try
+            Me.LogVersion = ""
             Dim xmlDoc As New XmlDocument()
             xmlDoc.Load(Me.txtPublisher.Text)
             Dim namespaceManager As New XmlNamespaceManager(xmlDoc.NameTable)
@@ -232,6 +248,7 @@ Public Class FrmHome
                 End If
                 Me.NewVersion = applicationVersionNode.InnerText
                 Me.NewRevision = ApplicationRevisionNode.InnerText
+                Me.LogVersion = Now.Year & "_" & DateTime.Now.ToString("MM") & "_" & DateTime.Now.ToString("dd") & "_" & Me.NewRevision
                 xmlDoc.Save(Me.txtPublisher.Text)
             Else
                 Return "No ApplicationVersion or ApplicationRevision node found"
@@ -258,20 +275,119 @@ Public Class FrmHome
             lblStatus.Text = "Please select a JSON file from the list."
         End If
     End Sub
+
+#Region "Log"
+    Private Function WriteLog() As Boolean
+
+        Dim folderPathNew As String = config.Version.PublishPath & "\Application Files\Pixel.Iris2.Publisher_" & Me.LogVersion
+
+        Dim datestring As Integer = LogVersion.LastIndexOf("_")
+
+        Dim dateresult As String = LogVersion.Substring(0, datestring)
+        Dim versionresult As Integer = LogVersion.Split("_"c).Last()
+
+        Dim basefolder As String = config.Version.PublishPath & "\Application Files\"
+        Dim targetFolderName As String = $"Pixel.Iris2.Publisher_{dateresult}_{versionresult}"
+
+        Dim previousVersion As Integer = FindLatestAvailableVersion(basefolder, dateresult, versionresult)
+        If previousVersion <> -1 Then
+            Dim previousFolderName As String = $"Pixel.Iris2.Publisher_{dateresult}_{previousVersion}"
+
+            Dim folderPathOld As String = Path.Combine(basefolder, previousFolderName)
+
+            Dim LogName As String = folderPathNew.Substring(folderPathNew.IndexOf("_") + 1)
+            Dim logFilePath As String = Me.LogPath & "\" & LogName & ".txt"
+            If Not System.IO.File.Exists(logFilePath) Then
+                System.IO.File.Create(logFilePath).Dispose()
+            End If
+            Using writer As New StreamWriter(logFilePath)
+                writer.WriteLine($"Version number: {Me.LogVersion}")
+                writer.WriteLine($"Date: {Year(DateTime.Now) & "/" & Month(DateTime.Now) & "/" & (DateTime.Now).Day & " " & DateAndTime.TimeString }")
+                writer.WriteLine()
+                Dim filesOld = Directory.GetFiles(folderPathOld, "*", SearchOption.TopDirectoryOnly)
+                Dim filesNew = Directory.GetFiles(folderPathNew, "*", SearchOption.TopDirectoryOnly)
+                Dim updatedFiles = GetUpdatedFiles(filesOld, filesNew)
+                If updatedFiles.Count > 0 Then
+                    writer.WriteLine("Updated Files:")
+                    For Each updatedFile In updatedFiles
+                        writer.WriteLine($"  {updatedFile} - Updated on {File.GetLastWriteTime(updatedFile)}")
+                    Next
+                    writer.WriteLine()
+                End If
+
+            End Using
+        Else
+            Console.WriteLine("No previous version found.")
+        End If
+        Return True
+    End Function
+
+    Private Function GetUpdatedFiles(filesOld As String(), filesNew As String()) As List(Of String)
+        Dim updatedFiles As New List(Of String)
+        For Each fileOld In filesOld
+            Dim fileNew = filesNew.FirstOrDefault(Function(f) String.Equals(Path.GetFileName(fileOld), Path.GetFileName(f), StringComparison.OrdinalIgnoreCase))
+            If fileNew IsNot Nothing Then
+                If Not FilesAreEqual(fileOld, fileNew) Then
+                    updatedFiles.Add(fileNew)
+                End If
+            End If
+        Next
+        Return updatedFiles
+    End Function
+
+    Private Function FilesAreEqual(file1 As String, file2 As String) As Boolean
+        If New FileInfo(file1).Length <> New FileInfo(file2).Length Then
+            Return False
+        End If
+        Using hash1 = MD5.Create(), hash2 = MD5.Create()
+            Using stream1 = File.OpenRead(file1), stream2 = File.OpenRead(file2)
+                Dim hashValue1 = hash1.ComputeHash(stream1)
+                Dim hashValue2 = hash2.ComputeHash(stream2)
+                For i As Integer = 0 To hashValue1.Length - 1
+                    If hashValue1(i) <> hashValue2(i) Then
+                        Return False
+                    End If
+                Next
+            End Using
+        End Using
+        Return True
+    End Function
+    Private Function FindLatestAvailableVersion(baseFolder As String, targetDate As String, currentVersion As Integer) As Integer
+        Dim versionToCheck As Integer = currentVersion - 1
+
+        While versionToCheck >= 1
+            Dim folderNameToCheck As String = $"Pixel.Iris2.Publisher_{targetDate}_{versionToCheck}"
+            Dim folderPathToCheck As String = Path.Combine(baseFolder, folderNameToCheck)
+
+            If Directory.Exists(folderPathToCheck) Then
+                Return versionToCheck
+            End If
+
+            versionToCheck -= 1
+        End While
+
+        Dim yesterday As DateTime = DateTime.Now.AddDays(-1)
+        Dim formatyesterday As String = yesterday.ToString("yyyy_MM_dd")
+
+        Return FindLatestAvailableVersion(baseFolder, formatyesterday, currentVersion)
+    End Function
+
+#End Region
+
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpdateToolStripMenuItem.Click
         Me.FillJson(config, ConfigPath)
     End Sub
     Private Sub OpenJSONToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenJSONToolStripMenuItem.Click
         Process.Start(ConfigPath)
     End Sub
-    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs)
         Me.Close()
     End Sub
     Private Sub CompileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CompileToolStripMenuItem.Click
-        Me.ChangeCompileReferencePath("Output")
+        Me.ChangeCompileReferencePath(OutputParameter)
     End Sub
     Private Sub ReferenceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReferenceToolStripMenuItem.Click
-        Me.ChangeCompileReferencePath("Reference")
+        Me.ChangeCompileReferencePath(ReferenceParameter)
     End Sub
     Private Sub ChangeVersionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ChangeVersionToolStripMenuItem.Click
         Me.txtPath.Text = GetPath(False, Me.txtPath.Text)
@@ -303,4 +419,15 @@ Public Class FrmHome
         End If
     End Sub
 
+    Private Sub ChbxSelectAll_CheckedChanged(sender As Object, e As EventArgs) Handles ChbxSelectAll.CheckedChanged
+        If ChbxSelectAll.Checked Then
+            For i As Integer = 0 To grd.Items.Count - 1
+                grd.SetSelected(i, True)
+            Next
+        Else
+            For i As Integer = 0 To grd.Items.Count - 1
+                grd.SetSelected(i, False)
+            Next
+        End If
+    End Sub
 End Class

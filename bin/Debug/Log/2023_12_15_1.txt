@@ -1,0 +1,8 @@
+Version number: 2023_12_15_2
+Date: 2023/12/15 11:33:39
+
+Updated Files:
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_15_1\Pixel.Iris2.Interfaces.dll.deploy - Updated on 12/15/2023 10:11:45 AM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_15_1\Pixel.Iris2.Publisher.exe.deploy - Updated on 12/15/2023 10:19:28 AM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_15_1\Pixel.Iris2.Publisher.exe.manifest - Updated on 12/15/2023 10:19:30 AM
+
