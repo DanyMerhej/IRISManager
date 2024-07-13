@@ -22,6 +22,7 @@ Partial Class FrmHome
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmHome))
         Me.txtVersion = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -31,13 +32,8 @@ Partial Class FrmHome
         Me.txtCompile = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.txtSolution = New System.Windows.Forms.TextBox()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.lblStatus = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ProgressBar = New System.Windows.Forms.ProgressBar()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtReference = New System.Windows.Forms.TextBox()
-        Me.grd = New System.Windows.Forms.ListBox()
-        Me.BtnCompile = New System.Windows.Forms.Button()
         Me.BtnReference = New System.Windows.Forms.Button()
         Me.BtnSolution = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -50,7 +46,6 @@ Partial Class FrmHome
         Me.BtnMSBuild = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtMSBuild = New System.Windows.Forms.TextBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.MenuStrip3 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenJSONToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -64,12 +59,9 @@ Partial Class FrmHome
         Me.PasteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CustomizeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DarkModeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripComboBoxRelease = New System.Windows.Forms.ToolStripComboBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.Panel4 = New System.Windows.Forms.Panel()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.UpdateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RetrieveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -77,16 +69,24 @@ Partial Class FrmHome
         Me.ReferenceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BuildToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReleaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.btnSelectAll = New System.Windows.Forms.Button()
-        Me.Panel6 = New System.Windows.Forms.Panel()
         Me.ChbxSelectAll = New System.Windows.Forms.CheckBox()
         Me.lblSelectAll = New System.Windows.Forms.Label()
-        Me.StatusStrip1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
+        Me.BuildTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.lblStatus = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.ProgressBar = New System.Windows.Forms.ProgressBar()
+        Me.BtnCompile = New System.Windows.Forms.Button()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.grd = New System.Windows.Forms.ListBox()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip3.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.Panel4.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
+        Me.TabControl1.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtVersion
@@ -94,7 +94,7 @@ Partial Class FrmHome
         Me.txtVersion.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtVersion.Location = New System.Drawing.Point(244, 70)
+        Me.txtVersion.Location = New System.Drawing.Point(94, 11)
         Me.txtVersion.Name = "txtVersion"
         Me.txtVersion.Size = New System.Drawing.Size(669, 21)
         Me.txtVersion.TabIndex = 0
@@ -103,7 +103,7 @@ Partial Class FrmHome
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label1.Location = New System.Drawing.Point(159, 70)
+        Me.Label1.Location = New System.Drawing.Point(9, 11)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(56, 17)
         Me.Label1.TabIndex = 1
@@ -113,7 +113,7 @@ Partial Class FrmHome
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label2.Location = New System.Drawing.Point(159, 98)
+        Me.Label2.Location = New System.Drawing.Point(9, 39)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(37, 17)
         Me.Label2.TabIndex = 3
@@ -124,7 +124,7 @@ Partial Class FrmHome
         Me.txtPath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtPath.Location = New System.Drawing.Point(244, 98)
+        Me.txtPath.Location = New System.Drawing.Point(94, 39)
         Me.txtPath.Name = "txtPath"
         Me.txtPath.Size = New System.Drawing.Size(669, 21)
         Me.txtPath.TabIndex = 2
@@ -133,7 +133,7 @@ Partial Class FrmHome
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label3.Location = New System.Drawing.Point(159, 126)
+        Me.Label3.Location = New System.Drawing.Point(9, 67)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(58, 17)
         Me.Label3.TabIndex = 5
@@ -144,16 +144,16 @@ Partial Class FrmHome
         Me.txtCompile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCompile.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtCompile.Location = New System.Drawing.Point(244, 126)
+        Me.txtCompile.Location = New System.Drawing.Point(94, 67)
         Me.txtCompile.Name = "txtCompile"
-        Me.txtCompile.Size = New System.Drawing.Size(624, 21)
+        Me.txtCompile.Size = New System.Drawing.Size(669, 21)
         Me.txtCompile.TabIndex = 4
         '
         'Label4
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label4.Location = New System.Drawing.Point(159, 182)
+        Me.Label4.Location = New System.Drawing.Point(9, 123)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(59, 17)
         Me.Label4.TabIndex = 7
@@ -164,43 +164,16 @@ Partial Class FrmHome
         Me.txtSolution.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtSolution.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtSolution.Location = New System.Drawing.Point(244, 182)
+        Me.txtSolution.Location = New System.Drawing.Point(94, 123)
         Me.txtSolution.Name = "txtSolution"
-        Me.txtSolution.Size = New System.Drawing.Size(624, 21)
+        Me.txtSolution.Size = New System.Drawing.Size(669, 21)
         Me.txtSolution.TabIndex = 6
-        '
-        'StatusStrip1
-        '
-        Me.StatusStrip1.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(28, 28)
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.lblStatus})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 431)
-        Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 8, 0)
-        Me.StatusStrip1.Size = New System.Drawing.Size(1017, 22)
-        Me.StatusStrip1.TabIndex = 9
-        Me.StatusStrip1.Text = "StatusStrip1"
-        '
-        'lblStatus
-        '
-        Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(0, 17)
-        '
-        'ProgressBar
-        '
-        Me.ProgressBar.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ProgressBar.Location = New System.Drawing.Point(0, 453)
-        Me.ProgressBar.Margin = New System.Windows.Forms.Padding(2)
-        Me.ProgressBar.Name = "ProgressBar"
-        Me.ProgressBar.Size = New System.Drawing.Size(1017, 5)
-        Me.ProgressBar.Step = 1
-        Me.ProgressBar.TabIndex = 11
         '
         'Label5
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label5.Location = New System.Drawing.Point(159, 154)
+        Me.Label5.Location = New System.Drawing.Point(9, 95)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(74, 17)
         Me.Label5.TabIndex = 13
@@ -211,63 +184,46 @@ Partial Class FrmHome
         Me.txtReference.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtReference.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtReference.Location = New System.Drawing.Point(244, 154)
+        Me.txtReference.Location = New System.Drawing.Point(94, 95)
         Me.txtReference.Name = "txtReference"
-        Me.txtReference.Size = New System.Drawing.Size(624, 21)
+        Me.txtReference.Size = New System.Drawing.Size(669, 21)
         Me.txtReference.TabIndex = 12
-        '
-        'grd
-        '
-        Me.grd.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.grd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.grd.FormattingEnabled = True
-        Me.grd.ItemHeight = 15
-        Me.grd.Location = New System.Drawing.Point(244, 296)
-        Me.grd.Margin = New System.Windows.Forms.Padding(2)
-        Me.grd.Name = "grd"
-        Me.grd.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.grd.Size = New System.Drawing.Size(671, 94)
-        Me.grd.TabIndex = 14
-        '
-        'BtnCompile
-        '
-        Me.BtnCompile.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnCompile.Location = New System.Drawing.Point(868, 126)
-        Me.BtnCompile.Margin = New System.Windows.Forms.Padding(2)
-        Me.BtnCompile.Name = "BtnCompile"
-        Me.BtnCompile.Size = New System.Drawing.Size(47, 20)
-        Me.BtnCompile.TabIndex = 17
-        Me.BtnCompile.Text = "..."
-        Me.BtnCompile.UseVisualStyleBackColor = True
         '
         'BtnReference
         '
         Me.BtnReference.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnReference.Location = New System.Drawing.Point(868, 154)
+        Me.BtnReference.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.BtnReference.BackgroundImage = CType(resources.GetObject("BtnReference.BackgroundImage"), System.Drawing.Image)
+        Me.BtnReference.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.BtnReference.Font = New System.Drawing.Font("Pristina", 10.0!)
+        Me.BtnReference.Location = New System.Drawing.Point(740, 95)
         Me.BtnReference.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnReference.Name = "BtnReference"
-        Me.BtnReference.Size = New System.Drawing.Size(47, 20)
+        Me.BtnReference.Size = New System.Drawing.Size(23, 21)
         Me.BtnReference.TabIndex = 18
-        Me.BtnReference.Text = "..."
-        Me.BtnReference.UseVisualStyleBackColor = True
+        Me.BtnReference.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.BtnReference.UseVisualStyleBackColor = False
         '
         'BtnSolution
         '
         Me.BtnSolution.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnSolution.Location = New System.Drawing.Point(868, 182)
+        Me.BtnSolution.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.BtnSolution.BackgroundImage = CType(resources.GetObject("BtnSolution.BackgroundImage"), System.Drawing.Image)
+        Me.BtnSolution.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.BtnSolution.Font = New System.Drawing.Font("Pristina", 10.0!)
+        Me.BtnSolution.Location = New System.Drawing.Point(740, 123)
         Me.BtnSolution.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnSolution.Name = "BtnSolution"
-        Me.BtnSolution.Size = New System.Drawing.Size(47, 20)
+        Me.BtnSolution.Size = New System.Drawing.Size(23, 21)
         Me.BtnSolution.TabIndex = 19
-        Me.BtnSolution.Text = "..."
-        Me.BtnSolution.UseVisualStyleBackColor = True
+        Me.BtnSolution.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.BtnSolution.UseVisualStyleBackColor = False
         '
         'Label7
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label7.Location = New System.Drawing.Point(159, 296)
+        Me.Label7.Location = New System.Drawing.Point(8, 9)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(59, 17)
         Me.Label7.TabIndex = 21
@@ -276,19 +232,23 @@ Partial Class FrmHome
         'BtnPublisher
         '
         Me.BtnPublisher.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnPublisher.Location = New System.Drawing.Point(868, 210)
+        Me.BtnPublisher.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.BtnPublisher.BackgroundImage = CType(resources.GetObject("BtnPublisher.BackgroundImage"), System.Drawing.Image)
+        Me.BtnPublisher.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.BtnPublisher.Font = New System.Drawing.Font("Pristina", 10.0!)
+        Me.BtnPublisher.Location = New System.Drawing.Point(740, 151)
         Me.BtnPublisher.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnPublisher.Name = "BtnPublisher"
-        Me.BtnPublisher.Size = New System.Drawing.Size(47, 20)
+        Me.BtnPublisher.Size = New System.Drawing.Size(23, 21)
         Me.BtnPublisher.TabIndex = 24
-        Me.BtnPublisher.Text = "..."
-        Me.BtnPublisher.UseVisualStyleBackColor = True
+        Me.BtnPublisher.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.BtnPublisher.UseVisualStyleBackColor = False
         '
         'Label6
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label6.Location = New System.Drawing.Point(159, 210)
+        Me.Label6.Location = New System.Drawing.Point(9, 151)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(67, 17)
         Me.Label6.TabIndex = 23
@@ -299,27 +259,31 @@ Partial Class FrmHome
         Me.txtPublisher.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtPublisher.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtPublisher.Location = New System.Drawing.Point(244, 210)
+        Me.txtPublisher.Location = New System.Drawing.Point(94, 151)
         Me.txtPublisher.Name = "txtPublisher"
-        Me.txtPublisher.Size = New System.Drawing.Size(624, 21)
+        Me.txtPublisher.Size = New System.Drawing.Size(669, 21)
         Me.txtPublisher.TabIndex = 22
         '
         'BtnPublishTo
         '
         Me.BtnPublishTo.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnPublishTo.Location = New System.Drawing.Point(868, 238)
+        Me.BtnPublishTo.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.BtnPublishTo.BackgroundImage = CType(resources.GetObject("BtnPublishTo.BackgroundImage"), System.Drawing.Image)
+        Me.BtnPublishTo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.BtnPublishTo.Font = New System.Drawing.Font("Pristina", 10.0!)
+        Me.BtnPublishTo.Location = New System.Drawing.Point(740, 179)
         Me.BtnPublishTo.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnPublishTo.Name = "BtnPublishTo"
-        Me.BtnPublishTo.Size = New System.Drawing.Size(47, 20)
+        Me.BtnPublishTo.Size = New System.Drawing.Size(23, 21)
         Me.BtnPublishTo.TabIndex = 27
-        Me.BtnPublishTo.Text = "..."
-        Me.BtnPublishTo.UseVisualStyleBackColor = True
+        Me.BtnPublishTo.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.BtnPublishTo.UseVisualStyleBackColor = False
         '
         'Label8
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label8.Location = New System.Drawing.Point(159, 238)
+        Me.Label8.Location = New System.Drawing.Point(9, 179)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(75, 17)
         Me.Label8.TabIndex = 26
@@ -330,27 +294,32 @@ Partial Class FrmHome
         Me.txtPublishTo.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtPublishTo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtPublishTo.Location = New System.Drawing.Point(244, 238)
+        Me.txtPublishTo.Location = New System.Drawing.Point(94, 179)
         Me.txtPublishTo.Name = "txtPublishTo"
-        Me.txtPublishTo.Size = New System.Drawing.Size(624, 21)
+        Me.txtPublishTo.Size = New System.Drawing.Size(669, 21)
         Me.txtPublishTo.TabIndex = 25
         '
         'BtnMSBuild
         '
         Me.BtnMSBuild.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnMSBuild.Location = New System.Drawing.Point(868, 266)
+        Me.BtnMSBuild.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.BtnMSBuild.BackgroundImage = CType(resources.GetObject("BtnMSBuild.BackgroundImage"), System.Drawing.Image)
+        Me.BtnMSBuild.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.BtnMSBuild.Font = New System.Drawing.Font("Pristina", 10.0!)
+        Me.BtnMSBuild.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.BtnMSBuild.Location = New System.Drawing.Point(740, 207)
         Me.BtnMSBuild.Margin = New System.Windows.Forms.Padding(2)
         Me.BtnMSBuild.Name = "BtnMSBuild"
-        Me.BtnMSBuild.Size = New System.Drawing.Size(47, 20)
+        Me.BtnMSBuild.Size = New System.Drawing.Size(23, 21)
         Me.BtnMSBuild.TabIndex = 30
-        Me.BtnMSBuild.Text = "..."
-        Me.BtnMSBuild.UseVisualStyleBackColor = True
+        Me.BtnMSBuild.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.BtnMSBuild.UseVisualStyleBackColor = False
         '
         'Label9
         '
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.Label9.Location = New System.Drawing.Point(159, 266)
+        Me.Label9.Location = New System.Drawing.Point(9, 207)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(59, 17)
         Me.Label9.TabIndex = 29
@@ -361,21 +330,10 @@ Partial Class FrmHome
         Me.txtMSBuild.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtMSBuild.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.txtMSBuild.Location = New System.Drawing.Point(244, 266)
+        Me.txtMSBuild.Location = New System.Drawing.Point(94, 207)
         Me.txtMSBuild.Name = "txtMSBuild"
-        Me.txtMSBuild.Size = New System.Drawing.Size(624, 21)
+        Me.txtMSBuild.Size = New System.Drawing.Size(669, 21)
         Me.txtMSBuild.TabIndex = 28
-        '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(199, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(231, Byte), Integer))
-        Me.Panel1.Controls.Add(Me.MenuStrip3)
-        Me.Panel1.Location = New System.Drawing.Point(111, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(906, 54)
-        Me.Panel1.TabIndex = 32
         '
         'MenuStrip3
         '
@@ -384,8 +342,8 @@ Partial Class FrmHome
         Me.MenuStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.ToolStripComboBoxRelease})
         Me.MenuStrip3.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip3.Name = "MenuStrip3"
-        Me.MenuStrip3.Padding = New System.Windows.Forms.Padding(20, 14, 0, 2)
-        Me.MenuStrip3.Size = New System.Drawing.Size(906, 48)
+        Me.MenuStrip3.Padding = New System.Windows.Forms.Padding(0)
+        Me.MenuStrip3.Size = New System.Drawing.Size(1017, 32)
         Me.MenuStrip3.TabIndex = 0
         Me.MenuStrip3.Text = "MenuStrip3"
         '
@@ -425,20 +383,20 @@ Partial Class FrmHome
         '
         Me.UndoToolStripMenuItem.Name = "UndoToolStripMenuItem"
         Me.UndoToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
-        Me.UndoToolStripMenuItem.Size = New System.Drawing.Size(165, 24)
+        Me.UndoToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
         Me.UndoToolStripMenuItem.Text = "&Undo"
         '
         'RedoToolStripMenuItem
         '
         Me.RedoToolStripMenuItem.Name = "RedoToolStripMenuItem"
         Me.RedoToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Y), System.Windows.Forms.Keys)
-        Me.RedoToolStripMenuItem.Size = New System.Drawing.Size(165, 24)
+        Me.RedoToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
         Me.RedoToolStripMenuItem.Text = "&Redo"
         '
         'toolStripSeparator3
         '
         Me.toolStripSeparator3.Name = "toolStripSeparator3"
-        Me.toolStripSeparator3.Size = New System.Drawing.Size(162, 6)
+        Me.toolStripSeparator3.Size = New System.Drawing.Size(177, 6)
         '
         'CutToolStripMenuItem
         '
@@ -446,7 +404,7 @@ Partial Class FrmHome
         Me.CutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CutToolStripMenuItem.Name = "CutToolStripMenuItem"
         Me.CutToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
-        Me.CutToolStripMenuItem.Size = New System.Drawing.Size(165, 24)
+        Me.CutToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
         Me.CutToolStripMenuItem.Text = "Cu&t"
         '
         'CopyToolStripMenuItem
@@ -455,7 +413,7 @@ Partial Class FrmHome
         Me.CopyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
         Me.CopyToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(165, 24)
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
         Me.CopyToolStripMenuItem.Text = "&Copy"
         '
         'PasteToolStripMenuItem
@@ -464,12 +422,12 @@ Partial Class FrmHome
         Me.PasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem"
         Me.PasteToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
-        Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(165, 24)
+        Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
         Me.PasteToolStripMenuItem.Text = "&Paste"
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CustomizeToolStripMenuItem, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CustomizeToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.AboutToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 11.0!)
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Padding = New System.Windows.Forms.Padding(4)
@@ -479,14 +437,21 @@ Partial Class FrmHome
         '
         'CustomizeToolStripMenuItem
         '
+        Me.CustomizeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DarkModeToolStripMenuItem})
         Me.CustomizeToolStripMenuItem.Name = "CustomizeToolStripMenuItem"
-        Me.CustomizeToolStripMenuItem.Size = New System.Drawing.Size(147, 24)
+        Me.CustomizeToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
         Me.CustomizeToolStripMenuItem.Text = "&Customize"
+        '
+        'DarkModeToolStripMenuItem
+        '
+        Me.DarkModeToolStripMenuItem.Name = "DarkModeToolStripMenuItem"
+        Me.DarkModeToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
+        Me.DarkModeToolStripMenuItem.Text = "Dark Mode"
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(147, 24)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
         Me.OptionsToolStripMenuItem.Text = "&Options"
         '
         'ToolStripComboBoxRelease
@@ -503,46 +468,6 @@ Partial Class FrmHome
         Me.ToolStripComboBoxRelease.Size = New System.Drawing.Size(144, 23)
         Me.ToolStripComboBoxRelease.Sorted = True
         '
-        'Panel2
-        '
-        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.Panel2.Controls.Add(Me.Panel5)
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1336, 15)
-        Me.Panel2.TabIndex = 33
-        '
-        'Panel5
-        '
-        Me.Panel5.BackColor = System.Drawing.SystemColors.InactiveCaption
-        Me.Panel5.Location = New System.Drawing.Point(3, 15)
-        Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(156, 39)
-        Me.Panel5.TabIndex = 36
-        '
-        'Panel3
-        '
-        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.Panel3.Location = New System.Drawing.Point(0, 12)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(15, 434)
-        Me.Panel3.TabIndex = 34
-        '
-        'Panel4
-        '
-        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Panel4.Controls.Add(Me.MenuStrip1)
-        Me.Panel4.Controls.Add(Me.btnSelectAll)
-        Me.Panel4.Location = New System.Drawing.Point(15, 52)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(128, 391)
-        Me.Panel4.TabIndex = 35
-        '
         'MenuStrip1
         '
         Me.MenuStrip1.AutoSize = False
@@ -554,10 +479,10 @@ Partial Class FrmHome
         Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(28, 28)
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.UpdateToolStripMenuItem, Me.RetrieveToolStripMenuItem, Me.CompileToolStripMenuItem, Me.ReferenceToolStripMenuItem, Me.BuildToolStripMenuItem, Me.ReleaseToolStripMenuItem})
         Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 32)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(0, 10, 0, 26)
-        Me.MenuStrip1.Size = New System.Drawing.Size(118, 391)
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(0)
+        Me.MenuStrip1.Size = New System.Drawing.Size(118, 399)
         Me.MenuStrip1.Stretch = False
         Me.MenuStrip1.TabIndex = 11
         Me.MenuStrip1.Text = "MenuStrip1"
@@ -583,6 +508,7 @@ Partial Class FrmHome
         'CompileToolStripMenuItem
         '
         Me.CompileToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.CompileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText
         Me.CompileToolStripMenuItem.Name = "CompileToolStripMenuItem"
         Me.CompileToolStripMenuItem.Padding = New System.Windows.Forms.Padding(4)
         Me.CompileToolStripMenuItem.Size = New System.Drawing.Size(117, 33)
@@ -592,6 +518,7 @@ Partial Class FrmHome
         'ReferenceToolStripMenuItem
         '
         Me.ReferenceToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.ReferenceToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ReferenceToolStripMenuItem.Name = "ReferenceToolStripMenuItem"
         Me.ReferenceToolStripMenuItem.Padding = New System.Windows.Forms.Padding(4)
         Me.ReferenceToolStripMenuItem.Size = New System.Drawing.Size(117, 33)
@@ -601,6 +528,7 @@ Partial Class FrmHome
         'BuildToolStripMenuItem
         '
         Me.BuildToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.BuildToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText
         Me.BuildToolStripMenuItem.Name = "BuildToolStripMenuItem"
         Me.BuildToolStripMenuItem.Padding = New System.Windows.Forms.Padding(4)
         Me.BuildToolStripMenuItem.Size = New System.Drawing.Size(117, 33)
@@ -609,37 +537,19 @@ Partial Class FrmHome
         '
         'ReleaseToolStripMenuItem
         '
+        Me.ReleaseToolStripMenuItem.BackColor = System.Drawing.SystemColors.Menu
         Me.ReleaseToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.ReleaseToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ReleaseToolStripMenuItem.Name = "ReleaseToolStripMenuItem"
         Me.ReleaseToolStripMenuItem.Padding = New System.Windows.Forms.Padding(4)
         Me.ReleaseToolStripMenuItem.Size = New System.Drawing.Size(117, 33)
         Me.ReleaseToolStripMenuItem.Text = "   Release"
         Me.ReleaseToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'btnSelectAll
-        '
-        Me.btnSelectAll.BackColor = System.Drawing.SystemColors.Menu
-        Me.btnSelectAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.btnSelectAll.Location = New System.Drawing.Point(32, 279)
-        Me.btnSelectAll.Name = "btnSelectAll"
-        Me.btnSelectAll.Size = New System.Drawing.Size(77, 25)
-        Me.btnSelectAll.TabIndex = 38
-        Me.btnSelectAll.Text = "Select All"
-        Me.btnSelectAll.UseVisualStyleBackColor = False
-        '
-        'Panel6
-        '
-        Me.Panel6.BackColor = System.Drawing.SystemColors.Menu
-        Me.Panel6.ForeColor = System.Drawing.SystemColors.InactiveCaption
-        Me.Panel6.Location = New System.Drawing.Point(15, 15)
-        Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(118, 39)
-        Me.Panel6.TabIndex = 37
-        '
         'ChbxSelectAll
         '
         Me.ChbxSelectAll.AutoSize = True
-        Me.ChbxSelectAll.Location = New System.Drawing.Point(225, 373)
+        Me.ChbxSelectAll.Location = New System.Drawing.Point(72, 48)
         Me.ChbxSelectAll.Name = "ChbxSelectAll"
         Me.ChbxSelectAll.Size = New System.Drawing.Size(15, 14)
         Me.ChbxSelectAll.TabIndex = 39
@@ -649,11 +559,133 @@ Partial Class FrmHome
         '
         Me.lblSelectAll.AutoSize = True
         Me.lblSelectAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.lblSelectAll.Location = New System.Drawing.Point(159, 370)
+        Me.lblSelectAll.Location = New System.Drawing.Point(6, 45)
         Me.lblSelectAll.Name = "lblSelectAll"
         Me.lblSelectAll.Size = New System.Drawing.Size(66, 17)
         Me.lblSelectAll.TabIndex = 40
         Me.lblSelectAll.Text = "Select All"
+        '
+        'BuildTimer
+        '
+        '
+        'lblStatus
+        '
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Size = New System.Drawing.Size(0, 17)
+        '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.BackColor = System.Drawing.SystemColors.MenuBar
+        Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(28, 28)
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.lblStatus})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 431)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 8, 0)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1017, 22)
+        Me.StatusStrip1.TabIndex = 9
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'ProgressBar
+        '
+        Me.ProgressBar.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.ProgressBar.Location = New System.Drawing.Point(0, 453)
+        Me.ProgressBar.Margin = New System.Windows.Forms.Padding(2)
+        Me.ProgressBar.Name = "ProgressBar"
+        Me.ProgressBar.Size = New System.Drawing.Size(1017, 5)
+        Me.ProgressBar.Step = 1
+        Me.ProgressBar.TabIndex = 11
+        '
+        'BtnCompile
+        '
+        Me.BtnCompile.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BtnCompile.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.BtnCompile.BackgroundImage = Global.IRISManager.My.Resources.Resources.FolderIcon
+        Me.BtnCompile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.BtnCompile.Font = New System.Drawing.Font("Pristina", 10.0!)
+        Me.BtnCompile.Location = New System.Drawing.Point(740, 67)
+        Me.BtnCompile.Margin = New System.Windows.Forms.Padding(2)
+        Me.BtnCompile.Name = "BtnCompile"
+        Me.BtnCompile.Size = New System.Drawing.Size(23, 21)
+        Me.BtnCompile.TabIndex = 17
+        Me.BtnCompile.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.BtnCompile.UseVisualStyleBackColor = False
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Controls.Add(Me.TabPage1)
+        Me.TabControl1.Controls.Add(Me.TabPage2)
+        Me.TabControl1.Location = New System.Drawing.Point(121, 35)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(896, 393)
+        Me.TabControl1.TabIndex = 41
+        '
+        'TabPage1
+        '
+        Me.TabPage1.Controls.Add(Me.txtVersion)
+        Me.TabPage1.Controls.Add(Me.Label1)
+        Me.TabPage1.Controls.Add(Me.txtPath)
+        Me.TabPage1.Controls.Add(Me.Label2)
+        Me.TabPage1.Controls.Add(Me.txtCompile)
+        Me.TabPage1.Controls.Add(Me.Label3)
+        Me.TabPage1.Controls.Add(Me.BtnMSBuild)
+        Me.TabPage1.Controls.Add(Me.txtSolution)
+        Me.TabPage1.Controls.Add(Me.Label9)
+        Me.TabPage1.Controls.Add(Me.Label4)
+        Me.TabPage1.Controls.Add(Me.txtMSBuild)
+        Me.TabPage1.Controls.Add(Me.txtReference)
+        Me.TabPage1.Controls.Add(Me.BtnPublishTo)
+        Me.TabPage1.Controls.Add(Me.Label5)
+        Me.TabPage1.Controls.Add(Me.Label8)
+        Me.TabPage1.Controls.Add(Me.BtnCompile)
+        Me.TabPage1.Controls.Add(Me.txtPublishTo)
+        Me.TabPage1.Controls.Add(Me.BtnReference)
+        Me.TabPage1.Controls.Add(Me.BtnPublisher)
+        Me.TabPage1.Controls.Add(Me.BtnSolution)
+        Me.TabPage1.Controls.Add(Me.Label6)
+        Me.TabPage1.Controls.Add(Me.txtPublisher)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(888, 367)
+        Me.TabPage1.TabIndex = 0
+        Me.TabPage1.Text = "Control"
+        Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'TabPage2
+        '
+        Me.TabPage2.Controls.Add(Me.grd)
+        Me.TabPage2.Controls.Add(Me.Label7)
+        Me.TabPage2.Controls.Add(Me.ChbxSelectAll)
+        Me.TabPage2.Controls.Add(Me.lblSelectAll)
+        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage2.Size = New System.Drawing.Size(888, 367)
+        Me.TabPage2.TabIndex = 1
+        Me.TabPage2.Text = "Work Space"
+        Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'grd
+        '
+        Me.grd.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.grd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
+        Me.grd.FormattingEnabled = True
+        Me.grd.ItemHeight = 15
+        Me.grd.Location = New System.Drawing.Point(93, 9)
+        Me.grd.Margin = New System.Windows.Forms.Padding(2)
+        Me.grd.Name = "grd"
+        Me.grd.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.grd.Size = New System.Drawing.Size(788, 349)
+        Me.grd.TabIndex = 14
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(180, 24)
+        Me.AboutToolStripMenuItem.Text = "About"
         '
         'FrmHome
         '
@@ -662,53 +694,26 @@ Partial Class FrmHome
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(199, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(231, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1017, 458)
-        Me.Controls.Add(Me.lblSelectAll)
-        Me.Controls.Add(Me.ChbxSelectAll)
-        Me.Controls.Add(Me.Panel6)
+        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.Controls.Add(Me.MenuStrip3)
         Me.Controls.Add(Me.StatusStrip1)
-        Me.Controls.Add(Me.Panel2)
-        Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Panel3)
-        Me.Controls.Add(Me.BtnMSBuild)
-        Me.Controls.Add(Me.Label9)
-        Me.Controls.Add(Me.txtMSBuild)
-        Me.Controls.Add(Me.BtnPublishTo)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.txtPublishTo)
-        Me.Controls.Add(Me.BtnPublisher)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.txtPublisher)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.BtnSolution)
-        Me.Controls.Add(Me.BtnReference)
-        Me.Controls.Add(Me.BtnCompile)
-        Me.Controls.Add(Me.grd)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.txtReference)
         Me.Controls.Add(Me.ProgressBar)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.txtSolution)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.txtCompile)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.txtPath)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.txtVersion)
         Me.MinimumSize = New System.Drawing.Size(389, 187)
         Me.Name = "FrmHome"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Home"
-        Me.StatusStrip1.ResumeLayout(False)
-        Me.StatusStrip1.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.MenuStrip3.ResumeLayout(False)
         Me.MenuStrip3.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel4.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
+        Me.TabControl1.ResumeLayout(False)
+        Me.TabPage1.ResumeLayout(False)
+        Me.TabPage1.PerformLayout()
+        Me.TabPage2.ResumeLayout(False)
+        Me.TabPage2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -722,12 +727,8 @@ Partial Class FrmHome
     Friend WithEvents txtCompile As TextBox
     Friend WithEvents Label4 As Label
     Friend WithEvents txtSolution As TextBox
-    Friend WithEvents StatusStrip1 As StatusStrip
-    Friend WithEvents lblStatus As ToolStripStatusLabel
-    Friend WithEvents ProgressBar As ProgressBar
     Friend WithEvents Label5 As Label
     Friend WithEvents txtReference As TextBox
-    Friend WithEvents grd As ListBox
     Friend WithEvents BtnCompile As Button
     Friend WithEvents BtnReference As Button
     Friend WithEvents BtnSolution As Button
@@ -741,7 +742,6 @@ Partial Class FrmHome
     Friend WithEvents BtnMSBuild As Button
     Friend WithEvents Label9 As Label
     Friend WithEvents txtMSBuild As TextBox
-    Friend WithEvents Panel1 As Panel
     Friend WithEvents MenuStrip3 As MenuStrip
     Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents UndoToolStripMenuItem As ToolStripMenuItem
@@ -753,12 +753,9 @@ Partial Class FrmHome
     Friend WithEvents ToolsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CustomizeToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Panel2 As Panel
-    Friend WithEvents Panel3 As Panel
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenJSONToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ChangeVersionToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Panel4 As Panel
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents UpdateToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents RetrieveToolStripMenuItem As ToolStripMenuItem
@@ -766,10 +763,17 @@ Partial Class FrmHome
     Friend WithEvents ReferenceToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BuildToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ReleaseToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Panel5 As Panel
-    Friend WithEvents Panel6 As Panel
-    Friend WithEvents btnSelectAll As Button
     Friend WithEvents ToolStripComboBoxRelease As ToolStripComboBox
     Friend WithEvents ChbxSelectAll As CheckBox
     Friend WithEvents lblSelectAll As Label
+    Friend WithEvents BuildTimer As Timer
+    Friend WithEvents DarkModeToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents lblStatus As ToolStripStatusLabel
+    Friend WithEvents StatusStrip1 As StatusStrip
+    Friend WithEvents ProgressBar As ProgressBar
+    Friend WithEvents TabControl1 As TabControl
+    Friend WithEvents TabPage1 As TabPage
+    Friend WithEvents TabPage2 As TabPage
+    Friend WithEvents grd As ListBox
+    Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
 End Class

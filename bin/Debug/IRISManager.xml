@@ -22,5 +22,25 @@ IRISManager
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
+<member name="P:IRISManager.My.Resources.Resources.dsBuffer_bmp_Dark">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:IRISManager.My.Resources.Resources.FolderIcon">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:IRISManager.My.Resources.Resources.FolderIcon1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:IRISManager.My.Resources.Resources.PaleBlue">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 </members>
 </doc>

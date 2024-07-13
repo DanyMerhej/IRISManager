@@ -72,12 +72,15 @@ D:\IRISManager\bin\Debug\Infragistics2.Shared.v10.2.xml
 D:\IRISManager\bin\Debug\Infragistics2.Win.Misc.v10.2.xml
 D:\IRISManager\bin\Debug\Infragistics2.Win.v10.2.xml
 D:\IRISManager\obj\Debug\IRISManager.exe.licenses
-\\pc16\shared\Pierre\IRISManagerDany\bin\Debug\IRISManager.exe.config
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.exe
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.xml
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.pdb
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.vbprojResolveAssemblyReference.cache
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.FrmHome.resources
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.Resources.resources
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.vbproj.GenerateResource.Cache
-\\pc16\shared\Pierre\IRISManagerDany\obj\Debug\IRISManager.exe.licenses
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Shared.v10.2.dll
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Win.Misc.v10.2.dll
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Win.v10.2.dll
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Newtonsoft.Json.dll
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Shared.v10.2.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Win.Misc.v10.2.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Win.v10.2.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Newtonsoft.Json.xml
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISManager.exe.licenses
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\obj\Debug\IRISMana.9CB98C5A.Up2Date
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Win.UltraWinGrid.v10.2.dll
+D:\DANNY\Desktop\DANNY's\VB.net Solutions\IRISManager\bin\Debug\Infragistics2.Win.UltraWinGrid.v10.2.xml

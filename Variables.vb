@@ -15,4 +15,5 @@ Public Class Version
     Public Property ProjectExtension As String
     Public Property ApplicationRevision As Int32
     Public Property ApplicationVersion As String
+    Public Property ThemeMode As String
 End Class

@@ -4,8 +4,11 @@ Imports Newtonsoft.Json
 Imports System.Diagnostics
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Security.Cryptography
+Imports Infragistics.Win.FormattedLinkLabel
+Imports System.Threading
 
 Public Class FrmHome
+    Inherits Form
     Dim json As String
     Dim config As Variables
     Dim fileList As New List(Of String)
@@ -23,8 +26,12 @@ Public Class FrmHome
     Dim LogVersion As String
     Private Const OutputParameter As String = "Output"
     Private Const ReferenceParameter As String = "Reference"
+    Private PreviousDates As String = ""
+    Private currentDate As DateTime = DateTime.Now
+    Private WithEvents colorProgressBar As New ColorProgressBar()
 
     Private Sub FrmHome_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Text = "IRIS Manager"
         lblStatus.Text = "Ready"
         ProgressBar.Maximum = 100
         json = File.ReadAllText(ConfigPath)
@@ -32,23 +39,49 @@ Public Class FrmHome
         Dim jsonFiles = Directory.GetFiles(Application.StartupPath & "\" & jsonFolderPath, "*.json").
         Where(Function(file) Path.GetFileName(file) <> MainJSONFile).ToArray()
         ToolStripComboBoxRelease.Items.AddRange(jsonFiles.Select(Function(file) Path.GetFileName(file)).ToArray())
-        'ToolStripComboBoxRelease.SelectedItem = MainJSONFile
         Me.FillTextBoxes(config)
+        ApplyThemeFromConfig()
     End Sub
+
     Private Sub FillTextBoxes(ByVal _Json As Variables)
         Me.txtVersion.Text = _Json.Version.VersionName
         Me.txtPath.Text = _Json.Version.VersionPath
         Me.txtCompile.Text = _Json.Version.VersionCompilePath
+        txtCompile.Controls.Add(BtnCompile)
+        BtnCompile.Dock = DockStyle.Fill
+        BtnCompile.Dock = DockStyle.Right
+        BtnCompile.Width = 21
         Me.txtReference.Text = _Json.Version.VersionReferencePath
+        txtReference.Controls.Add(BtnReference)
+        BtnReference.Dock = DockStyle.Fill
+        BtnReference.Dock = DockStyle.Right
+        BtnReference.Width = 21
         Me.txtSolution.Text = _Json.Version.VersionMainSolutionPath
+        txtSolution.Controls.Add(BtnSolution)
+        BtnSolution.Dock = DockStyle.Fill
+        BtnSolution.Dock = DockStyle.Right
+        BtnSolution.Width = 21
         Me.txtPublisher.Text = _Json.Version.PublisherPath
+        txtPublisher.Controls.Add(BtnPublisher)
+        BtnPublisher.Dock = DockStyle.Fill
+        BtnPublisher.Dock = DockStyle.Right
+        BtnPublisher.Width = 21
         Me.txtPublishTo.Text = _Json.Version.PublishPath
+        txtPublishTo.Controls.Add(BtnPublishTo)
+        BtnPublishTo.Dock = DockStyle.Fill
+        BtnPublishTo.Dock = DockStyle.Right
+        BtnPublishTo.Width = 21
         Me.txtMSBuild.Text = _Json.Version.MSBuildPath
+        txtMSBuild.Controls.Add(BtnMSBuild)
+        BtnMSBuild.Dock = DockStyle.Fill
+        BtnMSBuild.Dock = DockStyle.Right
+        BtnMSBuild.Width = 21
         Me.targetExtension = _Json.Version.ProjectExtension
     End Sub
+
     Private Sub FillJson(ByVal _Json As Variables, ByVal _Path As String)
         Try
-            Me.ProgressBar.Value = 0
+            Me.colorProgressBar.Value = 0
             _Json.Version.VersionName = Me.txtVersion.Text
             _Json.Version.VersionPath = Me.txtPath.Text
             _Json.Version.VersionCompilePath = Me.txtCompile.Text
@@ -60,36 +93,48 @@ Public Class FrmHome
             _Json.Version.ProjectExtension = Me.targetExtension
             Dim updatedJson As String = JsonConvert.SerializeObject(_Json, Xml.Formatting.Indented)
             File.WriteAllText(_Path, updatedJson)
-            Me.ProgressBar.Value = 100
+            Me.colorProgressBar.Value = 100
+            BuildTimer.Interval = 3000
+            BuildTimer.Start()
             lblStatus.Text = "New JSON saved successfully"
         Catch ex As Exception
             lblStatus.Text = "Error saving changes"
         End Try
     End Sub
+
     Private Sub ChangeCompileReferencePath(ByVal _Parameter As String)
-        Me.ProgressBar.Value = 0
+        Me.colorProgressBar.Value = 0
 
         If grd.Items.Count > 0 AndAlso grd.SelectedItems.Count > 0 Then
             For Each selectedItem As Object In grd.SelectedItems
                 If File.Exists(selectedItem) Then
                     Dim projectXml As New XmlDocument()
                     projectXml.Load(selectedItem)
-                    Dim userProjectPath As String = Path.ChangeExtension(selectedItem, ".vbproj.user")
-                    Dim userProjectXml As New XmlDocument()
-                    If File.Exists(userProjectPath) Then
-                        userProjectXml.Load(userProjectPath)
-                    End If
-                    Dim outputPathNode As XmlNode = projectXml.SelectSingleNode("//ns:" & OutputParameter & "Path", GetNamespaceManager(projectXml))
-                    If outputPathNode IsNot Nothing Then
-                        outputPathNode.InnerText = Me.txtCompile.Text
-                    End If
-                    Dim referencePathNode As XmlNode = userProjectXml.SelectSingleNode("//ns:" & ReferenceParameter & "Path", GetNamespaceManager(userProjectXml))
-                    If referencePathNode IsNot Nothing Then
-                        referencePathNode.InnerText = Me.txtReference.Text
+                    Dim nsmgr As XmlNamespaceManager = GetNamespaceManager(projectXml)
+                    Dim PathNode As XmlNode = projectXml.SelectSingleNode("//ns:" & _Parameter & "Path", GetNamespaceManager(projectXml))
+                    If PathNode IsNot Nothing Then
+                        Select Case _Parameter
+                            Case OutputParameter
+                                PathNode.InnerText = Me.txtCompile.Text
+                            Case ReferenceParameter
+                                PathNode.InnerText = Me.txtReference.Text
+                        End Select
+                    Else
+                        Dim newPropertyGroup As XmlElement = projectXml.CreateElement("PropertyGroup", projectXml.DocumentElement.NamespaceURI)
+                        Dim newPathNode As XmlElement = projectXml.CreateElement(_Parameter & "Path", projectXml.DocumentElement.NamespaceURI)
+
+                        Select Case _Parameter
+                            Case OutputParameter
+                                newPathNode.InnerText = Me.txtCompile.Text
+                            Case ReferenceParameter
+                                newPathNode.InnerText = Me.txtReference.Text
+                        End Select
+
+                        newPropertyGroup.AppendChild(newPathNode)
+                        projectXml.DocumentElement.AppendChild(newPropertyGroup)
                     End If
                     projectXml.Save(selectedItem)
-                    userProjectXml.Save(userProjectPath)
-                    Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
+                    Me.colorProgressBar.Value += 100 \ grd.SelectedItems.Count
                 Else
                     lblStatus.Text = "Project file not found"
                 End If
@@ -98,8 +143,9 @@ Public Class FrmHome
         Else
             lblStatus.Text = "Choose projects before proceeding"
         End If
-
-        Me.ProgressBar.Value = 100
+        Me.colorProgressBar.Value = 100
+        BuildTimer.Interval = 3000
+        BuildTimer.Start()
     End Sub
 
     Private Function GetNamespaceManager(ByVal xmlDoc As XmlDocument) As XmlNamespaceManager
@@ -123,6 +169,7 @@ Public Class FrmHome
             lblStatus.Text = "Error occured while retrieving files" & vbCrLf & ex.Message
         End Try
     End Sub
+
     Private Function GetPath(ByVal _WithFilePath As Boolean, ByVal _Path As String) As String
         Dim selectedPath As String = _Path
         Dim folderBrowser As New FolderBrowserDialog
@@ -140,6 +187,7 @@ Public Class FrmHome
         End If
         Return selectedPath
     End Function
+
     Private Sub ExecuteCmdCommand(processStartInfo As ProcessStartInfo, ByVal _FileName As String, ByVal _Arguments As String)
         processStartInfo.FileName = _FileName
         processStartInfo.Arguments = _Arguments
@@ -156,24 +204,35 @@ Public Class FrmHome
             process.WaitForExit()
         End Using
     End Sub
+
     Private Sub ChangeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BuildToolStripMenuItem.Click
-        Me.ProgressBar.Value = 0
+        Me.colorProgressBar.Value = 0
         If grd.Items.Count > 0 Then
-            lblStatus.Text = "Building ..."
             Refresh()
             For Each selectedItem As Object In grd.SelectedItems
-                Me.ProgressBar.Value += 100 \ grd.SelectedItems.Count
                 Dim projectPath As String = selectedItem
+                lblStatus.Text = $"Building {Path.GetFileName(projectPath)}..."
+                Application.DoEvents()
+                Me.colorProgressBar.Value += 100 \ grd.SelectedItems.Count
                 Me.ExecuteCmdCommand(New ProcessStartInfo(), config.Version.MSBuildPath, $"""{projectPath}"" /t:Rebuild /p:Configuration=Debug")
-                lblStatus.Text = "Build successfull"
             Next
+            lblStatus.Text = "Build successfull"
         Else
             lblStatus.Text = "Choose projects to build"
         End If
-        Me.ProgressBar.Value = 100
+        Me.colorProgressBar.Value = 100
+        BuildTimer.Interval = 3000
+        BuildTimer.Start()
+
     End Sub
+    Private Sub BuildTimer_Tick(sender As Object, e As EventArgs) Handles BuildTimer.Tick
+        BuildTimer.Stop()
+        Me.colorProgressBar.Value = 0
+        lblStatus.Text = "Ready"
+    End Sub
+
     Private Sub ReleaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReleaseToolStripMenuItem.Click
-        Me.ProgressBar.Value = 0
+        Me.colorProgressBar.Value = 0
         Me.lblStatus.Text = "Publishing ..."
         Me.lblStatus.Text = Me.GetLastAndNewVersion()
         If Me.lblStatus.Text = "" Then
@@ -201,9 +260,12 @@ Public Class FrmHome
             Me.WriteLog()
             lblStatus.Text &= " / Logged in: " & Me.LogVersion
 
-            Me.ProgressBar.Value = 100
+            Me.colorProgressBar.Value = 100
+            BuildTimer.Interval = 3000
+            BuildTimer.Start()
         End If
     End Sub
+
     Private Sub RetrieveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RetrieveToolStripMenuItem.Click
         fileList.Clear()
         grd.DataSource = Nothing
@@ -211,6 +273,7 @@ Public Class FrmHome
         If fileList.Count > 0 Then
             grd.DataSource = fileList
             lblStatus.Text = "Found a new list to process"
+            Me.TabControl1.SelectedTab = TabPage2
         Else
             grd.DataSource = Nothing
             lblStatus.Text = "Nothing found"
@@ -226,7 +289,6 @@ Public Class FrmHome
             namespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003")
             Dim applicationVersionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationVersion", namespaceManager)
             Dim ApplicationRevisionNode As XmlNode = xmlDoc.SelectSingleNode("//ns:ApplicationRevision", namespaceManager)
-
             If applicationVersionNode IsNot Nothing AndAlso ApplicationRevisionNode IsNot Nothing Then
                 Dim applicationVersion As String = applicationVersionNode.InnerText
                 Dim ApplicationRevision As String = ApplicationRevisionNode.InnerText
@@ -259,6 +321,7 @@ Public Class FrmHome
         End Try
         Return ""
     End Function
+
     Private Sub ToolStripComboBoxRelease_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ToolStripComboBoxRelease.SelectedIndexChanged
         If ToolStripComboBoxRelease.SelectedItem IsNot Nothing Then
             Dim selectedFileName As String = ToolStripComboBoxRelease.SelectedItem.ToString()
@@ -276,23 +339,25 @@ Public Class FrmHome
         End If
     End Sub
 
-#Region "Log"
+#Region "Write Log"
     Private Function WriteLog() As Boolean
-
         Dim folderPathNew As String = config.Version.PublishPath & "\Application Files\Pixel.Iris2.Publisher_" & Me.LogVersion
 
-        Dim datestring As Integer = LogVersion.LastIndexOf("_")
-
-        Dim dateresult As String = LogVersion.Substring(0, datestring)
+        Dim dateIndex As Integer = LogVersion.LastIndexOf("_")
+        Dim dateresult As String = LogVersion.Substring(0, dateIndex)
         Dim versionresult As Integer = LogVersion.Split("_"c).Last()
 
         Dim basefolder As String = config.Version.PublishPath & "\Application Files\"
         Dim targetFolderName As String = $"Pixel.Iris2.Publisher_{dateresult}_{versionresult}"
 
         Dim previousVersion As Integer = FindLatestAvailableVersion(basefolder, dateresult, versionresult)
+        Dim previousFolderName As String
         If previousVersion <> -1 Then
-            Dim previousFolderName As String = $"Pixel.Iris2.Publisher_{dateresult}_{previousVersion}"
-
+            If dateresult = Me.currentDate.ToString("yyyy_MM_dd") Then
+                previousFolderName = $"Pixel.Iris2.Publisher_{dateresult}_{previousVersion}"
+            Else
+                previousFolderName = $"Pixel.Iris2.Publisher_{Me.PreviousDates}_{previousVersion}"
+            End If
             Dim folderPathOld As String = Path.Combine(basefolder, previousFolderName)
 
             Dim LogName As String = folderPathNew.Substring(folderPathNew.IndexOf("_") + 1)
@@ -310,7 +375,8 @@ Public Class FrmHome
                 If updatedFiles.Count > 0 Then
                     writer.WriteLine("Updated Files:")
                     For Each updatedFile In updatedFiles
-                        writer.WriteLine($"  {updatedFile} - Updated on {File.GetLastWriteTime(updatedFile)}")
+                        Dim fileName = Path.GetFileName(updatedFile)
+                        writer.WriteLine($"  {fileName} - Updated on {File.GetLastWriteTime(updatedFile)}")
                     Next
                     writer.WriteLine()
                 End If
@@ -352,6 +418,7 @@ Public Class FrmHome
         End Using
         Return True
     End Function
+
     Private Function FindLatestAvailableVersion(baseFolder As String, targetDate As String, currentVersion As Integer) As Integer
         Dim versionToCheck As Integer = currentVersion - 1
 
@@ -366,10 +433,35 @@ Public Class FrmHome
             versionToCheck -= 1
         End While
 
-        Dim yesterday As DateTime = DateTime.Now.AddDays(-1)
-        Dim formatyesterday As String = yesterday.ToString("yyyy_MM_dd")
+        While True
+            Dim formatCurrentDate As String = Me.currentDate.ToString("yyyy_MM_dd")
 
-        Return FindLatestAvailableVersion(baseFolder, formatyesterday, currentVersion)
+            Dim latestVersionOfPreviousDay As Integer = GetLatestVersionOfPreviousDay(baseFolder, formatCurrentDate)
+
+            If latestVersionOfPreviousDay <> -1 Then
+                Return latestVersionOfPreviousDay
+            End If
+        End While
+    End Function
+
+    Private Function GetLatestVersionOfPreviousDay(baseFolder As String, yesterdayDateString As String) As Integer
+        Me.PreviousDates = yesterdayDateString
+        Dim folders = Directory.GetDirectories(baseFolder, $"Pixel.Iris2.Publisher_{yesterdayDateString}_*")
+
+        Dim versions As New List(Of Integer)()
+        For Each folder In folders
+            Dim versionString = folder.Split("_"c).Last()
+            Dim version As Integer
+            If Integer.TryParse(versionString, version) Then
+                versions.Add(version)
+            End If
+        Next
+
+        If versions.Count > 0 Then
+            Return versions.Max()
+        Else
+            Return -1
+        End If
     End Function
 
 #End Region
@@ -420,14 +512,120 @@ Public Class FrmHome
     End Sub
 
     Private Sub ChbxSelectAll_CheckedChanged(sender As Object, e As EventArgs) Handles ChbxSelectAll.CheckedChanged
-        If ChbxSelectAll.Checked Then
-            For i As Integer = 0 To grd.Items.Count - 1
-                grd.SetSelected(i, True)
-            Next
+        For i As Integer = 0 To grd.Items.Count - 1
+            grd.SetSelected(i, ChbxSelectAll.Checked)
+        Next
+    End Sub
+#Region "Dark/Light Mode"
+    Private Sub DarkModeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DarkModeToolStripMenuItem.Click
+        ToggleDarkMode()
+    End Sub
+    Private Sub ToggleDarkMode()
+        If config.Version.ThemeMode = "Light" Then
+            ApplyDarkMode()
         Else
-            For i As Integer = 0 To grd.Items.Count - 1
-                grd.SetSelected(i, False)
-            Next
+            ApplyLightMode()
         End If
     End Sub
+
+    Private Sub ToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles UpdateToolStripMenuItem.MouseEnter, RetrieveToolStripMenuItem.MouseEnter, CompileToolStripMenuItem.MouseEnter, ReferenceToolStripMenuItem.MouseEnter, BuildToolStripMenuItem.MouseEnter, ReleaseToolStripMenuItem.MouseEnter, FileToolStripMenuItem.MouseEnter, EditToolStripMenuItem.MouseEnter, ToolsToolStripMenuItem.MouseEnter
+        '' Change the background color when the mouse enters
+        'If config.Version.ThemeMode = "Dark" Then
+        '    Dim menuItem As ToolStripMenuItem = DirectCast(sender, ToolStripMenuItem)
+        '    menuItem.ForeColor = SystemColors.ControlText ' Set your desired text color
+        'End If
+    End Sub
+    Private Sub ToolStripMenuItem_MouseLeave(sender As Object, e As EventArgs) Handles UpdateToolStripMenuItem.MouseLeave, RetrieveToolStripMenuItem.MouseLeave, CompileToolStripMenuItem.MouseLeave, ReferenceToolStripMenuItem.MouseLeave, BuildToolStripMenuItem.MouseLeave, ReleaseToolStripMenuItem.MouseLeave, FileToolStripMenuItem.MouseLeave, EditToolStripMenuItem.MouseLeave, ToolsToolStripMenuItem.MouseLeave
+        '' Change the background color when the mouse enters
+        'If config.Version.ThemeMode = "Dark" Then
+        '    Dim menuItem As ToolStripMenuItem = DirectCast(sender, ToolStripMenuItem)
+        '    menuItem.ForeColor = SystemColors.ControlLightLight ' Set your desired text color
+        'End If
+    End Sub
+
+    Private Sub ApplyDarkMode()
+        'Me.BackColor = Color.FromArgb(52, 53, 65)
+        'colorProgressBar.ProgressBarColor = Color.Yellow
+
+        'For Each control As Control In Me.Controls
+        '    control.BackColor = Color.FromArgb(52, 53, 65)
+        '    control.ForeColor = Color.White
+        'Next
+        ''Panel2.BackColor = SystemColors.ControlText
+        ''Panel3.BackColor = SystemColors.ControlText
+        ''Panel6.BackColor = SystemColors.ControlText
+        'StatusStrip1.BackColor = SystemColors.ControlText
+        'MenuStrip1.BackgroundImage = Nothing
+        'MenuStrip1.BackColor = SystemColors.ControlText
+        'MenuStrip3.BackColor = SystemColors.ControlText
+        'ReleaseToolStripMenuItem.BackColor = SystemColors.ControlText
+        'FileToolStripMenuItem.BackColor = SystemColors.ControlText
+        'For Each ToolStripMenuItem As ToolStripMenuItem In {UpdateToolStripMenuItem, RetrieveToolStripMenuItem, CompileToolStripMenuItem, ReferenceToolStripMenuItem, BuildToolStripMenuItem, ReleaseToolStripMenuItem}
+        '    ToolStripMenuItem.ForeColor = SystemColors.ControlLightLight
+        'Next
+        'For Each ToolStripMenuItem As ToolStripMenuItem In {FileToolStripMenuItem, EditToolStripMenuItem, ToolsToolStripMenuItem}
+        '    ToolStripMenuItem.ForeColor = SystemColors.ControlLightLight
+        'Next
+        'DarkModeToolStripMenuItem.Text = "Light Mode"
+
+        'config.Version.ThemeMode = "Dark"
+        'FillJson(config, ConfigPath)
+    End Sub
+
+    Private Sub ApplyLightMode()
+        'Me.BackColor = Color.FromArgb(199, 215, 231)
+        'colorProgressBar.ProgressBarColor = Color.FromArgb(20, 237, 251)
+        'For Each control As Control In Me.Controls
+        '    control.BackColor = SystemColors.Control
+        '    control.ForeColor = SystemColors.ControlText
+        'Next
+        'MenuStrip3.BackColor = SystemColors.Menu
+        'FileToolStripMenuItem.BackColor = SystemColors.Menu
+        'MenuStrip1.BackgroundImage = My.Resources.PaleBlue
+        'MenuStrip1.BackColor = Color.FromArgb(199, 215, 231)
+        'MenuStrip3.BackColor = Color.FromArgb(199, 215, 231)
+        ''Panel2.BackColor = SystemColors.ActiveCaption
+        ''Panel3.BackColor = SystemColors.ActiveCaption
+        'For Each label As Label In {Label1, Label2, Label3, Label4, Label5, Label6, Label7, Label8, Label9, lblSelectAll}
+        '    label.BackColor = Color.FromArgb(199, 215, 231)
+        'Next
+        'For Each ToolStripMenuItem As ToolStripMenuItem In {UpdateToolStripMenuItem, RetrieveToolStripMenuItem, CompileToolStripMenuItem, ReferenceToolStripMenuItem, BuildToolStripMenuItem, ReleaseToolStripMenuItem}
+        '    ToolStripMenuItem.ForeColor = SystemColors.ControlText
+        'Next
+        'For Each ToolStripMenuItem As ToolStripMenuItem In {FileToolStripMenuItem, EditToolStripMenuItem, ToolsToolStripMenuItem}
+        '    ToolStripMenuItem.ForeColor = SystemColors.ControlText
+        'Next
+        'DarkModeToolStripMenuItem.Text = "Dark Mode"
+        'config.Version.ThemeMode = "Light"
+        'FillJson(config, ConfigPath)
+    End Sub
+
+    Private Sub ApplyThemeFromConfig()
+        'If config IsNot Nothing AndAlso config.Version IsNot Nothing Then
+        '    If config.Version.ThemeMode = "Dark" Then
+        '        ApplyDarkMode()
+        '    Else
+        '        ApplyLightMode()
+        '    End If
+        'End If
+    End Sub
+
+#End Region
+
+#Region "Blue Progress Bar"
+    Public Sub New()
+        InitializeComponent()
+        'Control Progress Bar Size
+        colorProgressBar.Location = New Point(0, 453)
+        colorProgressBar.Size = New Size(1017, 10)
+        ' Add Progress Bar
+        Me.Controls.Add(colorProgressBar)
+        'Progress Bar Design
+        colorProgressBar.BringToFront()
+        StatusStrip1.Dock = DockStyle.Bottom
+        colorProgressBar.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+    End Sub
+#End Region
+
 End Class
+

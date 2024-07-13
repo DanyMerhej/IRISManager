@@ -1,0 +1,7 @@
+Version number: 2023_12_19_16
+Date: 2023/12/19 16:57:27
+
+Updated Files:
+  Pixel.Iris2.Publisher.exe.deploy - Updated on 12/19/2023 4:57:24 PM
+  Pixel.Iris2.Publisher.exe.manifest - Updated on 12/19/2023 4:57:26 PM
+

@@ -1,0 +1,18 @@
+Version number: 2023_12_18_18
+Date: 2023/12/18 16:57:33
+
+Updated Files:
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.exe.deploy - Updated on 12/18/2023 4:11:14 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Interfaces.dll.deploy - Updated on 12/18/2023 4:11:08 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Profiles.BusinessRules.dll.deploy - Updated on 12/18/2023 4:11:16 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Profiles.DataAccess.dll.deploy - Updated on 12/18/2023 4:11:17 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Profiles.DataSets.dll.deploy - Updated on 12/18/2023 4:11:19 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Profiles.UI.dll.deploy - Updated on 12/18/2023 4:11:22 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Publisher.exe.deploy - Updated on 12/18/2023 4:56:59 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Publisher.exe.manifest - Updated on 12/18/2023 4:57:00 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Security.BusinessRules.dll.deploy - Updated on 12/18/2023 4:11:30 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Security.DataAccess.dll.deploy - Updated on 12/18/2023 4:11:26 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Security.DataSets.dll.deploy - Updated on 12/18/2023 4:11:27 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.Security.UI.dll.deploy - Updated on 12/18/2023 4:11:36 PM
+  D:\sourceVB\PUBLISHED VERSION\Application Files\Pixel.Iris2.Publisher_2023_12_18_18\Pixel.Iris2.UW.UI.dll.deploy - Updated on 12/18/2023 4:11:56 PM
+

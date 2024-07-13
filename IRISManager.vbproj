@@ -69,6 +69,7 @@
   <ItemGroup>
     <Reference Include="Infragistics2.Shared.v10.2, Version=10.2.20102.1004, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
     <Reference Include="Infragistics2.Win.Misc.v10.2, Version=10.2.20102.1004, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinGrid.v10.2, Version=10.2.20102.1004, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="Infragistics2.Win.v10.2, Version=10.2.20102.1004, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -100,6 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="ColorProgressBar.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FrmHome.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -163,9 +167,23 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\dsBuffer.bmp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dsBuffer.bmp.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PaleBlue.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dsBuffer.bmp.Dark.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FolderIcon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FolderIcon1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

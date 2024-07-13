@@ -1,0 +1,8 @@
+Version number: 2023_12_19_17
+Date: 2023/12/19 16:57:51
+
+Updated Files:
+  Pixel.Iris2.Interfaces.dll.deploy - Updated on 12/19/2023 4:57:37 PM
+  Pixel.Iris2.Publisher.exe.deploy - Updated on 12/19/2023 4:57:44 PM
+  Pixel.Iris2.Publisher.exe.manifest - Updated on 12/19/2023 4:57:46 PM
+
